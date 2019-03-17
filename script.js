@@ -50,7 +50,7 @@ skinApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) 
                     }
                 }).then(function (modal) {
                     console.log(modal);
-                    M.Modal.init(modal.element,{
+                    M.Modal.init(modal.element, {
                         onOpenEnd: function () {
                             console.log("onOpenEnd");
                         },
@@ -117,6 +117,31 @@ skinApp.controller("viewController", ["$scope", "$http", "$timeout", "$interval"
         //     $scope.showRandomSkin();
         // }, 2000);
     };
+
+    $scope.newTag = "";
+    $scope.newTagSubmitted = false;
+    $scope.$watch("newTag", function (newV, oldV) {
+        if (newV.length > 250) {
+            $scope.newTag = oldV;
+        }
+        $scope.newTag = newV ? newV.trim().toLowerCase().replace(/[^a-z]/, "") : "";
+    });
+    $scope.cleanupNewTag = function () {
+        console.log("cleanupNewTag");
+        console.log($scope.newTag);
+    };
+    $scope.submitNewTag = function () {
+        if ($scope.newTag.length === 0 || $scope.newTag.length > 250) {
+            return;
+        }
+
+        //TODO
+        $scope.availableTags.unshift($scope.newTag);
+        $scope.selectedTags.push($scope.newTag);
+
+        $scope.newTag = "";
+        $scope.newTagSubmitted = true;
+    }
 }]);
 
 skinApp.controller("overviewController", ["$scope", "$http", "$timeout", "$interval", "$stateParams", "$sce", function ($scope, $http, $timeout, $interval, $stateParams, $sce) {
@@ -139,7 +164,6 @@ skinApp.controller("overviewController", ["$scope", "$http", "$timeout", "$inter
             }, 2000);
         });
     };
-
 
 
     $scope.searchQuery = "";
