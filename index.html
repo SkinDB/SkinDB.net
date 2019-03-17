@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html ng-app="skinApp" ng-controller="skinController">
+    <head>
+        <title>SkinDB</title>
+        <link id="favicon" rel="icon" href="favicon.ico"/>
+
+        <!-- SEO -->
+        <meta name="keywords" content="skindb,skin,minecraft,database">
+        <meta name="description" content="SkinDB">
+        <!--<meta name="author" content="inventivetalent">-->
+
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="SkinDB">
+        <meta property="og:image" content="...">
+        <meta property="og:description" content="SkinDB">
+
+        <meta property="twitter:title" content="SkinDB">
+        <meta property="twitter:image" content="...">
+        <meta property="twitter:description" content="SkinDB">
+        <!--<meta property="twitter:creator" content="@Inventivtalent">-->
+        <meta property="twitter:card" content="summary">
+
+        <meta name="flattr:id" content="okelw0">
+
+        <!-- Style -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css" integrity="sha256-x8PYmLKD83R9T/sYmJn1j3is/chhJdySyhet/JuHnfY=" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" integrity="sha256-OweaP/Ic6rsV+lysfyS4h+LM6sRwuO3euTYfr6M124g=" crossorigin="anonymous"/>
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+        <link href="https://use.fontawesome.com/releases/v5.0.2/css/all.css" rel="stylesheet">
+        <style>
+            /*.header-bg {*/
+            /*height: 30vmin;*/
+            /*}*/
+
+            #searchBarContainer{
+                background-color: white;
+                border-radius: 20px;
+            }
+
+            @media (min-width: 600px) {
+                #searchBarContainer {
+                    margin-top: 50px;
+                }
+            }
+        </style>
+
+        <meta name=viewport content="width=device-width, initial-scale=1">
+
+        <!--<meta name="fragment" content="!">-->
+        <!--<base href="/">-->
+
+        <style>
+            .skin-tag {
+                background: #b3b3b3;
+                color: #505050;
+                border-radius: 20px;
+                padding: 2px 6px;
+                margin-left: 2px;
+                margin-right: 2px;
+                text-align: center;
+                font-size: 18px;
+                display: inline-block;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .skin-tag.selected {
+                background: #4081c7;
+                color: #272727;
+            }
+        </style>
+
+    </head>
+    <body>
+        <header>
+            <div class="row grey lighten-4 header-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col s4 m3 l2" style="padding: 8px">
+                            <img class="responsive-img" src="img/skinDB-x256.png">
+                        </div>
+                        <div class="col s8 m3 l3">
+                            <h1 class="header">SkinDB</h1>
+                        </div>
+                        <div class="col s12 m6 l7">
+                            <div class="row">
+                                <form class="col s12">
+                                    <div class="input-field col s12" id="searchBarContainer">
+                                        <input type="text" id="searchQuery" ng-model="searchQuery" ng-change="searchQueryChanged()">
+                                        <label for="searchQuery">Search Skin</label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                <div ui-view=""></div>
+            </div>
+        </main>
+        <footer class="indigo page-footer darken-1" style="margin-top:100px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m8">
+                        <h5 class="white-text">About</h5>
+                        <!--TODO-->
+                    </div>
+                    <div class="col s12 m2">
+                        <h5 class="white-text">Useful Links</h5>
+                        <!--TODO-->
+                    </div>
+                    <div class="col s12 m2">
+                        <h5 class="white-text">More Links</h5>
+                        <!--TODO-->
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <div class="container">
+                    Frontend by <a class="cyan-text" href="https://inventivetalent.org" target="_blank">inventivetalent</a>, Backend & API by <a class="cyan-text" href="https://sprax2013.de" target="_blank">Sprax2013</a>
+                    <span class="pull-right">
+                        This website is not affiliated with Minecraft / Mojang AB.
+                    </span>
+                </div>
+            </div>
+        </footer>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.7/angular.js" integrity="sha256-rilqatpiA1ZDu6m2BK2hef9keeJXWP+asd0X5ulfPmc=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.6.5/angular-sanitize.min.js" integrity="sha256-FPRibkFAa4FnfmKmMCV4sX162vfxgb3aOyN4kL+3bvA=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/ng-meta@1.0.3/dist/ngMeta.min.js" integrity="sha256-D9ZECtS6InC3JWV1vbUerU5Ti7fLkP86iTPVJacOC18=" crossorigin="anonymous"></script>
+
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.7/angular-route.min.js" integrity="sha256-l5Hd3fjavvxOOSwZeVCkbMT4KAeMEfLwQnSzjudC/4s=" crossorigin="anonymous"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js" integrity="sha256-FMocp8pp1WruAK6GtjNDtuGAALCt/dCsVtw7oSjvPX0=" crossorigin="anonymous"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" integrity="sha256-U/cHDMTIHCeMcvehBv1xQ052bPSbJtbuiw4QA9cTKz0=" crossorigin="anonymous"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" integrity="sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/1.0.1/angular-moment.min.js" integrity="sha256-BvdaZdPJc+x1dwsmn62ZkJ+4WepCjqP3xAFYrPP10F8=" crossorigin="anonymous"></script>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
+
+        <!--<script src="https://cdn.rawgit.com/dwmkerr/angular-modal-service/126c6ecf/dst/angular-modal-service.min.js"></script>-->
+        <!-- Modified script which fixes issues with using the service in the onEnter function -->
+        <script src="https://cdn.rawgit.com/pdgendt/c351649feb30860182c2/raw/2ca26cbdc7d5913e567b2a52087ee109b362cb8a/angular-modal-service.js"></script>
+
+
+        <script src="./script.js"></script>
+    </body>
+</html>
