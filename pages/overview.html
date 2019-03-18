@@ -43,7 +43,7 @@
                     <div class="col s12" ng-init="showRandomSkins()">
                         <div class="row">
                             <a class="skin-element" ng-repeat="result in searchResults" id="skin-{{ result['ID'] }}" href="/{{ result['ID'] }}" ui-sref="index.view({id:result['ID']})">
-                                <img src="img/loading.svg" ng-preload-src="https://api.mineskin.org/render/skin?url={{ result['MojangURL'] }}">
+                                <img src="img/loading.svg" ng-preload-src="https://tools.inventivetalent.org/skinrender/3d.php?user={{ result['MojangURL'] }}">
                             </a>
                         </div>
                     </div>
