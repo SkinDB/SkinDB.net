@@ -12,8 +12,8 @@
                     <div class="row">
                         <div class="col s12">
                             <div class="row">
-                                <a class="skin-tag" ng-repeat="tag in availableTags" ng-class="{'selected': isTagSelected(tag)}" ng-click="toggleTagSelection(tag)">
-                                    {{ tag }}
+                                <a class="skin-tag" ng-repeat="tag in availableTags" ng-class="{'selected': isTagSelected(tag.ID)}" ng-click="toggleTagSelection(tag.ID)">
+                                    {{ tag.Designation }}
                                 </a>
                             </div>
                             <div class="row">

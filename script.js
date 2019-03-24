@@ -91,6 +91,11 @@ skinApp.controller("viewController", ["$scope", "$http", "$timeout", "$interval"
     });
 
     $scope.availableTags = $scope.defaultAvailableTags;
+    $http({
+        url: apiBaseUrl + "/tags"
+    }).then(function (response) {
+        $scope.availableTags = response.data;
+    });
     $scope.selectedTags = [];
     $scope.isTagSelected = function (tag) {
         return $scope.selectedTags.indexOf(tag) >= 0;
@@ -109,13 +114,15 @@ skinApp.controller("viewController", ["$scope", "$http", "$timeout", "$interval"
     $scope.tagsSubmitted = false;
     $scope.submitTagSelection = function () {
 
-        //TODO
+        for (let tagId in $scope.selectedTags) {
+            $http({
+                url: apiBaseUrl + "/skin/"+$scope.skinId+"/vote?tag="+tagId+"&vote=1"
+            }).then(function (response) {
+
+            });
+        }
 
         $scope.tagsSubmitted = true;
-        //
-        // $timeout(function () {
-        //     $scope.showRandomSkin();
-        // }, 2000);
     };
 
     $scope.newTag = "";
