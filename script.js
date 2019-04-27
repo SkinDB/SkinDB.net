@@ -1,238 +1,114 @@
-let apiBaseUrl = "https://api.sprax2013.de/skindb";
+const API = 'https://api.skindb.net';
 
-console.log("BOOP!")
+const searchElem = document.getElementById('searchQuery'),
+  skinPrevElem = document.getElementById('skinPreviews'),
+  btnMoreSkins = document.getElementById('btnMoreSkins'),
 
-let skinApp = angular.module("skinApp", ["ui.router", "ui.materialize", "angularModalService"]);
+  skinModalElem = document.getElementById('skinModal'),
+  mineskinPrevElem = document.getElementById('mineskinPreview');
 
-skinApp.directive("ngPreloadSrc", function () {
-    return {
-        restrict: "A",
-        replace: true,
-        link: function (scope, element, attrs) {
-            var $preloader = $("<img style='display:none'>");
-            $preloader.attr("src", attrs.ngPreloadSrc);
-            $preloader.on("load", function () {
-                element.attr("src", attrs.ngPreloadSrc);
-                $preloader.remove();
-            });
-            $preloader.on("error", function () {
-                if (attrs.ngPreloadFallback) {
-                    element.attr("src", attrs.ngPreloadFallback);
-                }
-                $preloader.remove();
-            });
-            $preloader.appendTo(element);
-        }
+const skinModalInstace = M.Modal.init(skinModalElem, { preventScrolling: false, onCloseEnd: dismissedSkinModal });
+
+var lastSearch;
+
+onSearchInput = debounce(() => {
+  if (lastSearch !== searchElem.value.trim()) {
+    lastSearch = searchElem.value.trim();
+
+    if (lastSearch) {
+      skinPrevElem.innerHTML = '';
+
+      currShowingRandomSkins = false;
+      btnMoreSkins.classList.add('hide');
+    } else {
+      currShowingRandomSkins = true;
+      btnMoreSkins.classList.remove('hide');
+
+      showRandomSkins();
     }
-});
+  }
+}, 500);
 
-skinApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-    // $locationProvider.html5Mode(true);
-    $urlRouterProvider.otherwise('/');
-    $stateProvider
-        .state("index", {
-            url: "/",
-            templateUrl: "pages/overview.html",
-            controller: "overviewController"
-        })
-        .state("index.view", {
-            url: "^/{id:[A-Za-z0-9]{1,10}}",
-            onEnter: ["$state", "$stateParams", "ModalService", function ($state, $stateParams, ModalService) {
-                console.info("onEnter");
-                console.log($stateParams);
-                if (!$stateParams.id) return;
-
-                ModalService.showModal({
-                    templateUrl: "pages/view.html",
-                    controller: "viewController",
-                    inputs: {
-                        '$stateParams': $stateParams
-                    }
-                }).then(function (modal) {
-                    console.log(modal);
-                    M.Modal.init(modal.element, {
-                        onOpenEnd: function () {
-                            console.log("onOpenEnd");
-                        },
-                        onCloseEnd: function () {
-                            console.log("onCloseEnd");
-                            $(".modal").remove()
-                            $state.go("^");
-                        }
-                    })
-                    modal.element.modal("open");
-
-                })
-            }],
-            onExit: ["$state", function ($state) {
-                console.info("onExit")
-            }]
-        })
-
-});
-
-
-skinApp.controller("viewController", ["$scope", "$http", "$timeout", "$interval", "$stateParams", "$sce", function ($scope, $http, $timeout, $interval, $stateParams, $sce) {
-    console.info("viewController");
-
-    $scope.defaultAvailableTags = ["nude", "male", "female", "nsfw", "sfw"];
-
-    $scope.skinId = $stateParams.id;
-    $scope.skin = {};
-    $scope.previewUrl = "";
-    $scope.previewMinerenderUrl = "";
-    $http({
-        url: apiBaseUrl + "/provide/status?id=" + $scope.skinId
-    }).then(function (response) {
-        $scope.skin = response.data;
-
-        $scope.previewUrl = $sce.trustAsResourceUrl($scope.skin.SkinData);
-        $scope.previewMinerenderUrl = $sce.trustAsResourceUrl("https://minerender.org/embed/skin/?skin.url=" + $scope.skin.SkinData + "&shadow=true&autoResize=true&controls.pan=false&controls.zoom=false");
-    });
-
-    $scope.availableTags = $scope.defaultAvailableTags;
-    $http({
-        url: apiBaseUrl + "/tags"
-    }).then(function (response) {
-        $scope.availableTags = response.data;
-    });
-    $scope.selectedTags = [];
-    $scope.isTagSelected = function (tag) {
-        return $scope.selectedTags.indexOf(tag) >= 0;
-    };
-    $scope.toggleTagSelection = function (tag) {
-        if ($scope.tagsSubmitted) return;
-
-        let i = $scope.selectedTags.indexOf(tag);
-        if (i >= 0) {
-            $scope.selectedTags.splice(i, 1);
-        } else {
-            $scope.selectedTags.push(tag);
-        }
-        console.log($scope.selectedTags);
-    };
-    $scope.tagsSubmitted = false;
-    $scope.submitTagSelection = function () {
-
-        for (let tagId in $scope.selectedTags) {
-            $http({
-                url: apiBaseUrl + "/skin/"+$scope.skinId+"/vote?tag="+tagId+"&vote=1"
-            }).then(function (response) {
-
-            });
-        }
-
-        $scope.tagsSubmitted = true;
-    };
-
-    $scope.newTag = "";
-    $scope.newTagSubmitted = false;
-    $scope.$watch("newTag", function (newV, oldV) {
-        if (newV.length > 250) {
-            $scope.newTag = oldV;
-        }
-        $scope.newTag = newV ? newV.trim().toLowerCase().replace(/[^a-z]/, "") : "";
-    });
-    $scope.cleanupNewTag = function () {
-        console.log("cleanupNewTag");
-        console.log($scope.newTag);
-    };
-    $scope.submitNewTag = function () {
-        if ($scope.newTag.length === 0 || $scope.newTag.length > 250) {
-            return;
-        }
-
-        //TODO
-        $scope.availableTags.unshift($scope.newTag);
-        $scope.selectedTags.push($scope.newTag);
-
-        $scope.newTag = "";
-        $scope.newTagSubmitted = true;
-    }
-}]);
-
-skinApp.controller("overviewController", ["$scope", "$http", "$timeout", "$interval", "$stateParams", "$sce", function ($scope, $http, $timeout, $interval, $stateParams, $sce) {
-    console.info("overviewController")
-
-    $scope.skinUrl = "";
-    $scope.skinSubmitted = false;
-    $scope.addSkin = function () {
-        if ($scope.skinUrl.length < 40) return;
-        if (!$scope.skinUrl.startsWith("http")) return;
-        if ($scope.skinUrl.indexOf("://textures.minecraft.net/texture/") === -1) return;
-
-        $http({
-            url: apiBaseUrl + "/provide?skin" + $scope.skinUrl
-        }).then(function (response) {
-            $scope.skinUrl = "";
-            $scope.skinSubmitted = true;
-            $timeout(function () {
-                $scope.skinSubmitted = false;
-            }, 2000);
-        });
-    };
-
-
-    $scope.searchQuery = "";
-    $scope.searchResults = [];
-    $scope.searchQueryChanged = debounce(function () {
-        if ($scope.searchQuery.length === 0) {
-            $scope.showRandomSkins();
-        } else {
-            $http({
-                url: apiBaseUrl + "/skin/search?count=12&q=" + $scope.searchQuery
-            }).then(function (response) {
-                $scope.searchResults = response.data;
-            });
-        }
-    }, 500);
-
-    // $scope.previewUrl = "";
-    // $scope.previewMinerenderUrl = "";
-    // $scope.updatePreviewUrl = function (url) {
-    //     $scope.previewUrl = $sce.trustAsResourceUrl(url);
-    //     $scope.previewMinerenderUrl = $sce.trustAsResourceUrl("https://minerender.org/embed/skin/?skin.url=" + url + "&shadow=true&autoResize=true&controls.pan=false&controls.zoom=false");
-    // }
-
-    $scope.showRandomSkins = function () {
-        $http({
-            url: apiBaseUrl + "/skin/random?count=12"
-        }).then(function (response) {
-            // $scope.updatePreviewUrl(response.data[0]["MojangURL"])
-            $scope.searchResults = response.data;
-        });
-        $scope.tagsSubmitted = false;
-        $scope.availableTags = $scope.defaultAvailableTags;
-        $scope.selectedTags = [];
-        $scope.searchQuery = "";
-    }
-
-    $scope.loadSkinList = function () {
-        //TODO
-    }
-
-}]);
-
-skinApp.controller("skinController", ["$scope", "$http", "$timeout", "$interval", "$stateParams", "$sce", function ($scope, $http, $timeout, $interval, $stateParams, $sce) {
-
-}]);
-
-// Returns a function, that, as long as it continues to be invoked, will not
-// be triggered. The function will be called after it stops being called for
-// N milliseconds. If `immediate` is passed, trigger the function on the
-// leading edge, instead of the trailing.
 function debounce(func, wait, immediate) {
-    var timeout;
-    return function () {
-        var context = this, args = arguments;
-        var later = function () {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
+  var timeout;
+
+  return function () {
+    var ctx = this;
+    var args = arguments;
+
+    var later = function () {
+      timeout = null;
+      if (!immediate) func.apply(ctx, args);
     };
+
+    var callNow = immediate && !timeout;
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(later, wait);
+
+    if (callNow) func.apply(ctx, args);
+  };
 };
 
+function onLoadImg(elem) {
+  elem.classList.remove('loading');
+}
+
+function showRandomSkins() {
+  btnMoreSkins.setAttribute('disabled', 'disabled');
+  skinPrevElem.innerHTML = '';
+
+  fetch(API + '/skin/random?count=12', { cache: 'no-cache' })
+    .then((res) => {
+      if (res.status === 200) {
+        res.json()
+          .then((json) => {
+            for (const key in json) {
+              if (json.hasOwnProperty(key)) {
+                const skin = json[key];
+
+                skinPrevElem.innerHTML += `<a class="skin-element col" href="#!${skin.id}" onClick="showSkin(${skin.id})"><img class="loading" onload="onLoadImg(this)" src="${skin.urls.render}"></a>`;
+              }
+            }
+
+            btnMoreSkins.removeAttribute('disabled');
+          }).catch(console.error);
+      } else {
+        console.error('Non 200-StatusCode from API');
+      }
+    })
+    .catch(console.error);
+}
+
+function showSkin(skinID) {
+  // ToDo Check if skin exists
+  mineskinPrevElem.src = `https://minerender.org/embed/skin/?skin.url=https%3A%2F%2Fassets.skindb.net%2Fskins%2F${skinID}%2Fskin.png&shadow=true&autoResize=true&controls.pan=false&controls.zoom=false`;
+
+  skinModalInstace.open();
+}
+
+function dismissedSkinModal() {
+  history.pushState("", document.title, window.location.pathname + window.location.search);
+
+  mineskinPrevElem.src = '';
+}
+
+function onHashChange() {
+  if (window.location.hash && window.location.hash.startsWith('#!')) {
+    let skinID = window.location.hash.substring(2);
+
+    if (skinID) {
+      skinID = Number.parseInt(skinID);
+
+      if (Number.isSafeInteger(skinID)) {
+        showSkin(skinID);
+      }
+    }
+  }
+}
+
+window.addEventListener('hashchange', onHashChange);
+
+showRandomSkins();
+onHashChange();
