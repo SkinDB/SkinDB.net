@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Admin Area"
+AuthUserFile /var/www/SkinDB.net/root/acp/.htpasswd
+Require valid-user
