@@ -72,52 +72,59 @@ function loadPrevSkin() {
 }
 
 function saveSkin(callback) {
-  const formElem = document.getElementById('skinForm');
+  const adminToken = document.getElementById('tokenInput').value;
 
-  if (formElem.checkValidity()) {
-    let json = {};
+  if (adminToken && /^[0-9a-zA-Z]+$/i.test(adminToken)) {
+    const formElem = document.getElementById('skinForm');
 
-    for (const elem of formElem.getElementsByTagName('input')) {
-      if (elem.id.startsWith('form')) {
-        json[elem.id.substring(4)] = elem.type === 'checkbox' ? elem.checked : (elem.value || null);
-      }
-    }
+    if (formElem.checkValidity()) {
+      let json = {};
 
-    for (const elem of formElem.getElementsByTagName('select')) {
-      if (elem.id.startsWith('form')) {
-        json[elem.id.substring(4)] = elem.options[elem.selectedIndex].value || null;
-      }
-    }
-
-    fetch(API + '/skin/' + currID + '/meta', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${document.getElementById('tokenInput').value}`
-      },
-      body: JSON.stringify(json),
-      cache: 'no-cache'
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          M.toast({ html: 'Meta has been saved', classes: 'green' });
-          callback(true);
-        } else if (res.status === 401 || res.status === 403) {
-          M.toast({ html: 'Invalid Token', classes: 'red darken' });
-          callback(false);
-        } else {
-          M.toast({ html: `Code ${res.status} from API`, classes: 'red darken' });
-          callback(false);
+      for (const elem of formElem.getElementsByTagName('input')) {
+        if (elem.id.startsWith('form')) {
+          json[elem.id.substring(4)] = elem.type === 'checkbox' ? elem.checked : (elem.value || null);
         }
-      })
-      .catch((err) => {
-        console.error(err);
+      }
 
-        M.toast({ html: 'Meta could not be saved', classes: 'red darken' });
-        callback(false);
-      });
+      for (const elem of formElem.getElementsByTagName('select')) {
+        if (elem.id.startsWith('form')) {
+          json[elem.id.substring(4)] = elem.options[elem.selectedIndex].value || null;
+        }
+      }
+
+      fetch(API + '/skin/' + currID + '/meta', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}`
+        },
+        body: JSON.stringify(json),
+        cache: 'no-cache'
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            M.toast({ html: 'Meta has been saved', classes: 'green' });
+            callback(true);
+          } else if (res.status === 401 || res.status === 403) {
+            M.toast({ html: 'Invalid Admin-Token', classes: 'red darken' });
+            callback(false);
+          } else {
+            M.toast({ html: `Code ${res.status} from API`, classes: 'red darken' });
+            callback(false);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+
+          M.toast({ html: 'Meta could not be saved', classes: 'red darken' });
+          callback(false);
+        });
+    } else {
+      M.toast({ html: 'Form contains invalid values', classes: 'red darken' });
+      callback(false);
+    }
   } else {
-    M.toast({ html: 'Form contains invalid values!', classes: 'red darken' });
+    M.toast({ html: 'Invalid Admin-Token', classes: 'red darken' });
     callback(false);
   }
 }
