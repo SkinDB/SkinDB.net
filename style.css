@@ -1,0 +1,58 @@
+#searchBarContainer {
+  background-color: white;
+  border-radius: 20px;
+}
+
+@media (min-width: 600px) {
+  #searchBarContainer {
+    margin-top: 50px;
+  }
+}
+
+.skin-tag {
+  background: #b3b3b3;
+  color: #505050;
+  border-radius: 20px;
+  padding: 2px 6px;
+  margin-left: 2px;
+  margin-right: 2px;
+  text-align: center;
+  font-size: 18px;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+}
+
+.skin-tag.selected {
+  background: #4081c7;
+  color: #272727;
+}
+
+.pull-right {
+  float: right;
+}
+
+.skin-element img {
+  width: 185px;
+  height: 405px;
+
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+}
+
+.light-shadow {
+  -webkit-filter: drop-shadow(2.5px 2.5px 2.5px rgba(34, 34, 34, 0.375));
+  filter: drop-shadow(2.5px 2.5px 2.5px rgba(34, 34, 34, 0.375));
+}
+
+img.skin-element {
+  width: 185px;
+  height: 405px;
+
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+}
+
+.loading {
+  background: transparent url('./img/loading.svg') center no-repeat;
+}
