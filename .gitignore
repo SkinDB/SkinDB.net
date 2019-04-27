@@ -1,1 +1,4 @@
 *.idea/
+.htpasswd
+.ORIGINAL/
+img/.*
