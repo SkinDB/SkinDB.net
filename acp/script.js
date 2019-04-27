@@ -2,11 +2,6 @@ const API = 'https://api.skindb.net';
 
 var currID = Number.parseInt(Cookies.get('lastSkinID')) || 1;
 
-function saveSkinAndNext() {
-  saveSkin();
-  loadNextSkin();
-}
-
 function reloadSkin(skinJSON) {
   getSkinMeta(skinJSON['id'], (err, meta) => {
     if (err) {
@@ -17,7 +12,7 @@ function reloadSkin(skinJSON) {
     let skinURL = encodeURI(skinJSON['urls']['clean']);
 
     document.getElementById('skinName').innerText = currID;
-    document.getElementById('skinPrev').src = `https://minerender.org/embed/skin/?skin.url=${skinURL}&shadow=true&autoResize=true&controls.pan=false&controls.zoom=false`;
+    document.getElementById('skinPrev').src = `https://minerender.org/embed/skin/?skin.url=${encodeURI(skinJSON['urls']['mojang']) /*skinURL*/}&shadow=true&autoResize=true&controls.pan=false&controls.zoom=false`;  // DEBUG
     document.getElementById('skin3D').src = 'https://api.mineskin.org/render/skin?url=' + skinURL;
 
     // Form
@@ -47,32 +42,36 @@ function reloadSkin(skinJSON) {
 
 
 function loadNextSkin() {
-  saveSkin();
+  saveSkin((success) => {
+    if (success) {
+      nextSkin((err, json) => {
+        if (err) {
+          console.error(err);
+          return M.toast({ html: err.message, classes: 'red darken' });
+        }
 
-  nextSkin((err, json) => {
-    if (err) {
-      console.error(err);
-      return M.toast({ html: err.message, classes: 'red darken' });
+        reloadSkin(json);
+      });
     }
-
-    reloadSkin(json);
   });
 }
 
 function loadPrevSkin() {
-  saveSkin();
+  saveSkin((success) => {
+    if (success) {
+      prevSkin((err, json) => {
+        if (err) {
+          console.error(err);
+          return M.toast({ html: err.message, classes: 'red darken' });
+        }
 
-  prevSkin((err, json) => {
-    if (err) {
-      console.error(err);
-      return M.toast({ html: err.message, classes: 'red darken' });
+        reloadSkin(json);
+      });
     }
-
-    reloadSkin(json);
   });
 }
 
-function saveSkin() {
+function saveSkin(callback) {
   const formElem = document.getElementById('skinForm');
 
   if (formElem.checkValidity()) {
@@ -90,28 +89,43 @@ function saveSkin() {
       }
     }
 
-    fetch(API + '/skin/' + currID + '/meta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(json), cache: 'no-cache' })
+    fetch(API + '/skin/' + currID + '/meta', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${document.getElementById('tokenInput').value}`
+      },
+      body: JSON.stringify(json),
+      cache: 'no-cache'
+    })
       .then((res) => {
         if (res.status === 200) {
           M.toast({ html: 'Meta has been saved', classes: 'green' });
+          callback(true);
+        } else if (res.status === 401 || res.status === 403) {
+          M.toast({ html: 'Invalid Token', classes: 'red darken' });
+          callback(false);
         } else {
-          M.toast({ html: 'Non 200-StatusCode from API', classes: 'red darken' });
+          M.toast({ html: `Code ${res.status} from API`, classes: 'red darken' });
+          callback(false);
         }
       })
       .catch((err) => {
         console.error(err);
 
         M.toast({ html: 'Meta could not be saved', classes: 'red darken' });
+        callback(false);
       });
   } else {
     M.toast({ html: 'Form contains invalid values!', classes: 'red darken' });
+    callback(false);
   }
 }
 
 function getSkin(skinID, callback) {
   fetch(API + '/skin/' + skinID, { cache: 'no-cache' })
     .then((res) => {
-      if (res.status !== 200) return callback(new Error('Non 200 Status from API'));
+      if (res.status !== 200) return callback(new Error(`Code ${res.status} from API`));
 
       res.json()
         .then((json) => { callback(null, json); })
@@ -143,7 +157,7 @@ function prevSkin(callback) {
 function getSkinMeta(skinID, callback) {
   fetch(API + '/skin/' + skinID + '/meta', { cache: 'no-cache' })
     .then((res) => {
-      if (res.status !== 200) return callback(new Error('Non 200 Status from API'));
+      if (res.status !== 200) return callback(new Error(`Code ${res.status} from API`));
 
       res.json()
         .then((json) => { callback(null, json); })
