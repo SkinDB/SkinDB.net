@@ -43,7 +43,7 @@
   <meta name="author" content="Sprax2013">
   <meta name="twitter:site" content="@Sprax2013">
 
-  <!-- CSS -->
+  <!-- Style -->
   <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     integrity="sha256-OweaP/Ic6rsV+lysfyS4h+LM6sRwuO3euTYfr6M124g=" crossorigin="anonymous">
@@ -52,9 +52,21 @@
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> -->
 
   <link rel="stylesheet" href="./../style.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"
+    integrity="sha256-ebN46PPB/s45oUcqLn2SCrgOtYgVJaFiLZ26qVSqI8M=" crossorigin="anonymous">
 </head>
 
 <body>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139119217-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-139119217-1', { anonymize_ip: true });
+  </script>
+
   <header>
     <div class="row grey lighten-4 header-bg">
       <div class="container">
@@ -269,15 +281,33 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
     integrity="sha256-U/cHDMTIHCeMcvehBv1xQ052bPSbJtbuiw4QA9cTKz0=" crossorigin="anonymous"></script>
-  <!-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var instances = M.FormSelect.init(document.querySelectorAll('select'));
-    });</script> -->
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.0/js.cookie.min.js"
     integrity="sha256-9Nt2r+tJnSd2A2CRUvnjgsD+ES1ExvjbjBNqidm9doI=" crossorigin="anonymous"></script>
 
   <script src="./script.js"></script>
+
+  <!-- Cookie Consent -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"
+    integrity="sha256-y0EpKQP2vZljM73+b7xY4dvbYQkHRQXuPqRjc7sjvnA=" crossorigin="anonymous" defer></script>
+  <script>
+    window.addEventListener('load', function () {
+      window.cookieconsent.initialise({
+        palette: {
+          popup: {
+            background: '#edeff5',
+            text: '#838391'
+          },
+          button: {
+            background: '#4b81e8'
+          }
+        },
+        theme: 'classic',
+        position: 'bottom-right'
+      })
+    });
+  </script>
+
+  <script src="./../es6-warning.js" async defer></script> <!-- Do the same with noscript-tags -->
 </body>
 
 </html>
