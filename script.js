@@ -4,24 +4,33 @@ const searchElem = document.getElementById('searchQuery'),
   skinPrevElem = document.getElementById('skinPreviews'),
   btnMoreSkins = document.getElementById('btnMoreSkins'),
 
+  txtSearchTotalSkins = document.getElementById('totalSkins'),
+
   skinModalElem = document.getElementById('skinModal'),
   mineskinPrevElem = document.getElementById('mineskinPreview');
 
 const skinModalInstace = M.Modal.init(skinModalElem, { preventScrolling: false, onCloseEnd: dismissedSkinModal });
 
-var lastSearch;
+var lastSearch = '', searchPage = 1, currShowingRandomSkins = false;
 
 onSearchInput = debounce(() => {
   if (lastSearch !== searchElem.value.trim()) {
     lastSearch = searchElem.value.trim();
+    searchPage = 1;
 
     if (lastSearch) {
       skinPrevElem.innerHTML = '';
 
       currShowingRandomSkins = false;
+
       btnMoreSkins.classList.add('hide');
+      txtSearchTotalSkins.classList.remove('hide');
+
+      showSearchResults();
     } else {
       currShowingRandomSkins = true;
+
+      txtSearchTotalSkins.classList.add('hide');
       btnMoreSkins.classList.remove('hide');
 
       showRandomSkins();
@@ -81,6 +90,38 @@ function showRandomSkins() {
     .catch(console.error);
 }
 
+function showSearchResults() {
+  // btnMoreSkins.setAttribute('disabled', 'disabled');
+  skinPrevElem.innerHTML = '';
+  txtSearchTotalSkins.innerText = '';
+
+  // ToDo: Show Total results, total pages, paginator
+
+  fetch(`${API}/search?count=12&page=${escape(searchPage)}&q=${escape(lastSearch)}`)
+    .then((res) => {
+      if (res.status === 200) {
+        res.json()
+          .then((json) => {
+            txtSearchTotalSkins.innerText = `Found ${json['total']} skins`;
+
+            let skins = json['results'];
+            for (const key in skins) {
+              if (skins.hasOwnProperty(key)) {
+                const skin = skins[key];
+
+                skinPrevElem.innerHTML += `<a class="skin-element col" href="#!${skin.id}" onClick="showSkin(${skin.id})"><img class="loading" onload="onLoadImg(this)" src="${skin.urls.render}"></a>`;
+              }
+            }
+
+            // btnMoreSkins.removeAttribute('disabled');
+          }).catch(console.error);
+      } else {
+        console.error('Non 200-StatusCode from API');
+      }
+    })
+    .catch(console.error);
+}
+
 function showSkin(skinID) {
   // ToDo Check if skin exists
   mineskinPrevElem.src = `https://minerender.org/embed/skin/?skin.url=https%3A%2F%2Fassets.skindb.net%2Fskins%2F${skinID}%2Fskin.png&shadow=true&autoResize=true&controls.pan=false&controls.zoom=false`;
@@ -110,5 +151,10 @@ function onHashChange() {
 
 window.addEventListener('hashchange', onHashChange);
 
-showRandomSkins();
+
+onSearchInput();
+if (currShowingRandomSkins) {
+  showRandomSkins();
+}
+
 onHashChange();
