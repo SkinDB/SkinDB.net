@@ -3,6 +3,12 @@
   border-radius: 20px;
 }
 
+header .logo {
+  width: auto;
+  height: 10rem;
+  float: right;
+}
+
 @media (min-width: 600px) {
   #searchBarContainer {
     margin-top: 50px;
