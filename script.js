@@ -5,18 +5,21 @@ const searchElem = document.getElementById('searchQuery'),
   btnMoreSkins = document.getElementById('btnMoreSkins'),
 
   txtSearchTotalSkins = document.getElementById('totalSkins'),
+  btnPrev = document.getElementById('btnPrev'),
+  btnNext = document.getElementById('btnNext'),
+  txtPageIndi = document.getElementById('pageIndicator'),
 
   skinModalElem = document.getElementById('skinModal'),
   mineskinPrevElem = document.getElementById('mineskinPreview');
 
 const skinModalInstace = M.Modal.init(skinModalElem, { preventScrolling: false, onCloseEnd: dismissedSkinModal });
 
-var lastSearch = '', searchPage = 1, currShowingRandomSkins = false;
+var lastSearch = '', currSearchPage = 1, currShowingRandomSkins = false;
 
 onSearchInput = debounce(() => {
   if (lastSearch !== searchElem.value.trim()) {
     lastSearch = searchElem.value.trim();
-    searchPage = 1;
+    currSearchPage = 1;
 
     if (lastSearch) {
       skinPrevElem.innerHTML = '';
@@ -24,19 +27,44 @@ onSearchInput = debounce(() => {
       currShowingRandomSkins = false;
 
       btnMoreSkins.classList.add('hide');
+
+      btnNext.classList.remove('hide');
+      btnPrev.classList.remove('hide');
+      txtPageIndi.classList.remove('hide');
       txtSearchTotalSkins.classList.remove('hide');
+
 
       showSearchResults();
     } else {
       currShowingRandomSkins = true;
 
+      btnNext.classList.add('hide');
+      btnPrev.classList.add('hide');
+      txtPageIndi.classList.add('hide');
       txtSearchTotalSkins.classList.add('hide');
+
       btnMoreSkins.classList.remove('hide');
 
       showRandomSkins();
     }
   }
 }, 500);
+
+function nextPage() {
+  if (currShowingRandomSkins) return;
+
+  currSearchPage++;
+  showSearchResults();
+}
+
+function prevPage() {
+  if (currShowingRandomSkins) return;
+
+  if (currSearchPage > 1) {
+    currSearchPage--;
+    showSearchResults();
+  }
+}
 
 function debounce(func, wait, immediate) {
   var timeout;
@@ -91,19 +119,15 @@ function showRandomSkins() {
 }
 
 function showSearchResults() {
-  // btnMoreSkins.setAttribute('disabled', 'disabled');
   skinPrevElem.innerHTML = '';
   txtSearchTotalSkins.innerText = '';
+  pageIndicator.innerText = '';
 
-  // ToDo: Show Total results, total pages, paginator
-
-  fetch(`${API}/search?count=12&page=${escape(searchPage)}&q=${escape(lastSearch)}`)
+  fetch(`${API}/search?count=12&page=${escape(currSearchPage)}&q=${escape(lastSearch)}`)
     .then((res) => {
       if (res.status === 200) {
         res.json()
           .then((json) => {
-            txtSearchTotalSkins.innerText = `Found ${json['total']} skins`;
-
             let skins = json['results'];
             for (const key in skins) {
               if (skins.hasOwnProperty(key)) {
@@ -113,7 +137,21 @@ function showSearchResults() {
               }
             }
 
-            // btnMoreSkins.removeAttribute('disabled');
+            let totalPages = Math.ceil(json['total'] / 12);
+
+            if (currSearchPage <= 1) {
+              btnPrev.classList.add('disabled');
+            } else {
+              btnPrev.classList.remove('disabled');
+            }
+            if (currSearchPage >= totalPages) {
+              btnNext.classList.add('disabled');
+            } else {
+              btnNext.classList.remove('disabled');
+            }
+
+            pageIndicator.innerText = currSearchPage + ' / ' + totalPages;
+            txtSearchTotalSkins.innerText = `Found ${json['total']} skins`;
           }).catch(console.error);
       } else {
         console.error('Non 200-StatusCode from API');

@@ -39,7 +39,7 @@
   <meta name="twitter:site" content="@Sprax2013">
 
   <!-- Style -->
-  <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     integrity="sha256-OweaP/Ic6rsV+lysfyS4h+LM6sRwuO3euTYfr6M124g=" crossorigin="anonymous">
 
@@ -99,14 +99,25 @@
             <div class="col s12">
               <div class="row">
                 <div class="col s12">
+                  <!-- ToDo: Show gray steves instead of empty div and add skins one-by-one -->
                   <div class="row" id="skinPreviews"></div>
                 </div>
               </div>
 
               <div class="row center">
-                <a class="btn" id="btnMoreSkins" onclick="showRandomSkins()">
+                <a class="btn hide" id="btnMoreSkins" onclick="showRandomSkins()">
                   More Skins!
                 </a>
+
+                <a class="btn indigo lighten-2 hide" id="btnPrev" onclick="prevPage()">
+                  <i class="material-icons">chevron_left</i>
+                </a>
+                <a class="btn indigo lighten-2 hide" id="btnNext" onclick="nextPage()">
+                  <i class="material-icons">chevron_right</i>
+                </a>
+
+                <br>
+                <b class="hide" id="pageIndicator">0 / 12</b>
               </div>
             </div>
           </div>
