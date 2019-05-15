@@ -10,11 +10,14 @@ const searchElem = document.getElementById('searchQuery'),
   txtPageIndi = document.getElementById('pageIndicator'),
 
   skinModalElem = document.getElementById('skinModal'),
-  mineskinPrevElem = document.getElementById('mineskinPreview');
+  mineskinPrevElem = document.getElementById('mineskinPreview'),
+  btnApplySkin = document.getElementById('btnApplySkin'),
+  btnDownloadSkin = document.getElementById('btnDownloadSkin')
+  ;
 
 const skinModalInstace = M.Modal.init(skinModalElem, { preventScrolling: false, onCloseEnd: dismissedSkinModal });
 
-var lastSearch = '', currSearchPage = 1, currShowingRandomSkins = false;
+var lastSearch = '', currSearchPage = 1, currShowingRandomSkins = true;
 
 onSearchInput = debounce(() => {
   if (lastSearch !== searchElem.value.trim()) {
@@ -162,13 +165,27 @@ function showSearchResults() {
 
 function showSkin(skinID) {
   // ToDo Check if skin exists
-  mineskinPrevElem.src = `https://minerender.org/embed/skin/?skin.url=https%3A%2F%2Fassets.skindb.net%2Fskins%2F${skinID}%2Fskin.png&shadow=true&autoResize=true&controls.pan=false&controls.zoom=false`;
+  let skinURL = `https%3A%2F%2Fassets.skindb.net%2Fskins%2F${skinID}%2Fskin.png`;
+
+  mineskinPrevElem.src = `https://minerender.org/embed/skin/?skin.url=${skinURL}&shadow=true&autoResize=true&controls.pan=false&controls.zoom=false&camera.target=[0,90,0]`;
+
+  btnApplySkin.setAttribute('href', 'https://my.minecraft.net/profile/skin/remote?url=' + skinURL);
+  btnDownloadSkin.setAttribute('href', `https://assets.skindb.net/skins/${skinID}/skin.png`);
+  btnDownloadSkin.setAttribute('download', `skin-${skinID}.png`);
+
+  console.log('set page:', `/skinModal/${skinID}`);
+  ga('set', 'page', `/${skinID}.html`);
+  ga('send', 'pageview');
 
   skinModalInstace.open();
 }
 
 function dismissedSkinModal() {
-  history.pushState("", document.title, window.location.pathname + window.location.search);
+  history.pushState('', document.title, window.location.pathname + window.location.search);
+
+  console.log('set page:', '/');
+  ga('set', 'page', '/');
+  ga('send', 'pageview');
 
   mineskinPrevElem.src = '';
 }

@@ -9,6 +9,11 @@ header .logo {
   float: right;
 }
 
+.material-icons {
+  float: left;
+  padding-right: .2rem;
+}
+
 @media (min-width: 600px) {
   #searchBarContainer {
     margin-top: 50px;
