@@ -12,8 +12,7 @@ const searchElem = document.getElementById('searchQuery'),
   skinModalElem = document.getElementById('skinModal'),
   mineskinPrevElem = document.getElementById('mineskinPreview'),
   btnApplySkin = document.getElementById('btnApplySkin'),
-  btnDownloadSkin = document.getElementById('btnDownloadSkin')
-  ;
+  btnDownloadSkin = document.getElementById('btnDownloadSkin');
 
 const skinModalInstace = M.Modal.init(skinModalElem, { preventScrolling: false, onCloseEnd: dismissedSkinModal });
 
@@ -108,7 +107,7 @@ function showRandomSkins() {
               if (json.hasOwnProperty(key)) {
                 const skin = json[key];
 
-                skinPrevElem.innerHTML += `<a class="skin-element col" href="#!${skin.id}" onClick="showSkin(${skin.id})"><img class="loading" onload="onLoadImg(this)" src="${skin.urls.render}"></a>`;
+                skinPrevElem.innerHTML += `<a class="skin-element col" href="#!${skin['ID']}" onClick="showSkin(${skin['ID']})"><img class="loading" onload="onLoadImg(this)" src="${skin.urls.render}"></a>`;
               }
             }
 
@@ -136,7 +135,7 @@ function showSearchResults() {
               if (skins.hasOwnProperty(key)) {
                 const skin = skins[key];
 
-                skinPrevElem.innerHTML += `<a class="skin-element col" href="#!${skin.id}" onClick="showSkin(${skin.id})"><img class="loading" onload="onLoadImg(this)" src="${skin.urls.render}"></a>`;
+                skinPrevElem.innerHTML += `<a class="skin-element col" href="#!${skin['ID']}" onClick="showSkin(${skin['ID']})"><img class="loading" onload="onLoadImg(this)" src="${skin.urls.render}"></a>`;
               }
             }
 
@@ -165,12 +164,12 @@ function showSearchResults() {
 
 function showSkin(skinID) {
   // ToDo Check if skin exists
-  let skinURL = `https%3A%2F%2Fassets.skindb.net%2Fskins%2F${skinID}%2Fskin.png`;
+  let skinURL = encodeURIComponent(`https://cdn.skindb.net/skins/${skinID}/skin.png`);
 
   mineskinPrevElem.src = `https://minerender.org/embed/skin/?skin.url=${skinURL}&shadow=true&autoResize=true&controls.pan=false&controls.zoom=false&camera.target=[0,90,0]`;
 
-  btnApplySkin.setAttribute('href', 'https://my.minecraft.net/profile/skin/remote?url=' + skinURL);
-  btnDownloadSkin.setAttribute('href', `https://assets.skindb.net/skins/${skinID}/skin.png`);
+  btnApplySkin.setAttribute('href', `https://my.minecraft.net/profile/skin/remote?url=${skinURL}`);
+  btnDownloadSkin.setAttribute('href', `https://cdn.skindb.net/skins/${skinID}/skin.png`);
   btnDownloadSkin.setAttribute('download', `skin-${skinID}.png`);
 
   console.log('set page:', `/skinModal/${skinID}`);
