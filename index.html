@@ -78,7 +78,7 @@
             <div class="row">
               <form class="col s12" onsubmit="event.preventDefault()">
                 <div class="input-field col s12" id="searchBarContainer">
-                  <input type="search" id="searchQuery" oninput="onSearchInput()">
+                  <input type="search" class="autocomplete" id="searchQuery" oninput="onSearchInput()">
                   <label for="searchQuery">Search Skin</label>
                 </div>
               </form>
@@ -264,6 +264,10 @@
         theme: 'classic',
         position: 'bottom-right'
       })
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var instance = M.Autocomplete.init(document.getElementById('searchQuery'));
     });
   </script>
 
