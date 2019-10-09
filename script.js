@@ -88,7 +88,7 @@ function debounce(func, wait, immediate) {
 
     if (callNow) func.apply(ctx, args);
   };
-};
+}
 
 function onLoadImg(elem) {
   elem.classList.remove('loading');
