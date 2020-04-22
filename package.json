@@ -1,0 +1,36 @@
+{
+  "name": "skindb.net",
+  "version": "0.0.1",
+  "description": "",
+  "homepage": "https://github.com/SkinDB/SkinDB.net/#readme",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "cross-env NODE_ENV=production nodemon build/index.js",
+    "devStart": "cross-env NODE_ENV=development ts-node src/index.ts",
+    "dev": "nodemon --ext ts --watch ./src --exec \"npm run devStart\""
+  },
+  "author": "Sprax2013",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkinDB/SkinDB.net.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SkinDB/SkinDB.net/issues"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.3"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "ts-node": "^8.9.0",
+    "typescript": "^3.8.3"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "build"
+    ]
+  }
+}
