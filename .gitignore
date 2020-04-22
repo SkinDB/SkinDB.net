@@ -1,4 +1,4 @@
-*.idea/
-.htpasswd
-.ORIGINAL/
-img/.*
+/node_modules/
+/storage/
+/build/
+/logs/
