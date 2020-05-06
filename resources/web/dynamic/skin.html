@@ -75,7 +75,7 @@
               <hr class="w-95">
 
               <!-- TODO: Make div scrollable and don't show all users by default -->
-              <div class="card-content">
+              <div class="card-content" style="max-height: 150px; overflow-y: auto">
                 <%2- page.skin.seen_on.map((el) => { return `<a href="<%0- global.url.base %0>/account/${el.id}">${el.name}</a>`; }).join(',\n                '); %2>
               </div>
             </div>
