@@ -2,7 +2,7 @@ import path = require('path');
 import ejs = require('ejs');
 
 import { readFileSync } from 'fs';
-import { SkinDBAccount, SkinDBSkin, SkinDBSearch } from './global';
+import { SkinDBAccount, SkinDBSkin, SkinDBSearch, SkinDBIndex } from './global';
 
 const dynamicWebPath = path.join(__dirname, '..', 'resources', 'web', 'dynamic');
 
@@ -45,7 +45,8 @@ interface PageData {
   page: {
     account?: SkinDBAccount,
     skin?: SkinDBSkin,
-    search?: SkinDBSearch
+    search?: SkinDBSearch,
+    index?: SkinDBIndex
   }
 };
 

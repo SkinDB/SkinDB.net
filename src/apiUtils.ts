@@ -1,8 +1,12 @@
 import { cfg } from '.';
-import { SkinDBAccount, SkinDBSkin, SkinDBSearch } from './global';
+import { SkinDBAccount, SkinDBSkin, SkinDBSearch, SkinDBIndex } from './global';
 import request from 'request';
 
 const baseURL = cfg.spraxAPI.useUnixSocket ? `http://unix:${cfg.spraxAPI.unixSocketAbsolutePath}:` : 'https://api.sprax2013.de';
+
+export async function getTopThisWeek(): Promise<SkinDBIndex> {
+  return getFromAPI('index') as Promise<SkinDBIndex>;
+}
 
 export async function getAccount(uuid: string): Promise<SkinDBAccount> {
   return getFromAPI(`account/${encodeURIComponent(uuid)}`) as Promise<SkinDBAccount>;

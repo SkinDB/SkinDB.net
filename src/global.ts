@@ -91,6 +91,11 @@ export interface SkinDBSearch {
   }
 }
 
+
+export interface SkinDBIndex {
+  top_ten: { id: string, count: number }[]
+}
+
 /**
  * value equals remote database enum
 */

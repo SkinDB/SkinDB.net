@@ -1,17 +1,23 @@
 import { Router } from 'express';
 import { restful, ErrorBuilder, isNumber } from '../utils';
 import { PageParts, render } from '../dynamicPageGenerator';
-import { getAccount, getSkin, getSearch } from '../apiUtils';
+import { getAccount, getSkin, getSearch, getTopThisWeek } from '../apiUtils';
 
 /* Routes */
 const router = Router();
 export const skindbExpressRouter = router;
 
-router.all(['/', '/index.html'], (req, res, next) => {
+router.all('/', (req, res, next) => {
   restful(req, res, {
     get: () => {
-      res.type('html')
-        .send(render(PageParts.INDEX));
+      getTopThisWeek()
+        .then((index) => {
+          const result = render(PageParts.INDEX, { page: { index } });
+
+          res.type('html')
+            .send(result);
+        })
+        .catch(next);
     }
   });
 });
