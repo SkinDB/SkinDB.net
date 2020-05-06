@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de" class="h-100">
+
+<head>
+  <%0- _HEAD %0>
+
+  <title>SkinDB.net — Searchable Minecraft skin database</title>
+</head>
+
+<body class="d-flex flex-column h-100 dark-body text-light">
+  <!--?{DarkTheme:dark-body text-light?:?}-->
+  <%0- _HEADER %0>
+
+  <!-- TODO: Missing headline in format like 'Profile for Sprax2013' -->
+  <main style="margin-bottom: 2rem">
+    <div class="container">
+      <%0- _SEARCH %0>
+      <br>
+
+      <div class="row row-equal">
+        <div class="col-md-3">
+          <div class="card-skin text-dark text-center">
+            <img class="img-fluid mx-auto d-block"
+              src="https://api.sprax2013.de/mc/skin/x-url/body/3d?size=128&url=https://cdn.skindb.net/skins/<%2= page.account.skinHistory.lastTen[0] %2>">
+
+            <div class="card-skin-history text-center">
+              <div class="card-title">Skinverlauf&nbsp;(<%2= page.account.skinHistory.total %2>)</div>
+
+              <div class="card-content" style="font-size: 0">
+                <%2 for (const skinID of page.account.skinHistory.lastTen) { -%2>
+                  <a href="<%0- global.url.base %0>/skin/<%2= skinID %2>">
+                    <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/x-url/head/3d?size=30&url=https://cdn.skindb.net/skins/<%2= skinID %2>">
+                  </a>
+                  <%2 } -%2>
+              </div>
+            </div>
+
+            <br>
+
+            <b>Is this your Account?</b>
+            <br><br>
+            <a href="#"><b>Login</b></a>
+            <br><br>
+          </div>
+        </div>
+
+        <div class="col-1 d-none d-md-block"></div>
+
+        <div class="col">
+          <div class="card-account">
+            <section>
+              <h3>UUID</h3>
+
+              <div class="card-content text-monospace" style="word-break: break-all">
+                <i class="material-icons">file_copy</i>
+                <%2= page.account.user.id_hyphens %2>
+                <br>
+                <i class="material-icons">file_copy</i>
+                <%2= page.account.user.id %2>
+              </div>
+            </section>
+
+            <section>
+              <h3>Name History</h3>
+
+              <div class="card-content">
+                <ol reversed>
+                  <%2 for (let i =page.account.user.name_history.length-1; i >= 0; i--) { %2>
+                  <li><span class="text-monospace"><%2= page.account.user.name_history[i].name %2></span></li>
+                  <%2 } %2>
+                </ol>
+              </div>
+            </section>
+
+            <section>
+              <h3>Social Media</h3>
+
+              <div class="card-content">
+                <b><i>Coming Soon!</i></b>
+                <!-- <a class="a-stealth" href="https://sprax.me/discord" style="margin-right: 10px" rel="noopener">
+                  <img src="<%0- global.url.static %0>/img/Discord.svg" width="22" height="22" alt="Discord-Logo">
+                </a>
+
+                <a class="a-stealth" href="https://sprax.me/twitter" style="margin-right: 10px" rel="noopener">
+                  <img src="<%0- global.url.static %0>/img/Twitter.svg" width="22" height="22" alt="Twitter-Logo">
+                </a> -->
+              </div>
+            </section>
+
+            <section>
+              <h3>Public Lists</h3>
+
+              <div class="card-content">
+                <i>No public lists</i>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <%0- _FOOTER %0>
+</body>
+
+</html>

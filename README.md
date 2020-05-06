@@ -38,9 +38,12 @@ This API provides data in JSON format. I can't even display an ad in some corner
 2. `npm install`
 3. `npm run build`
 4. `npm run start`
-4. Configure all files inside `./storage` (automatically generated)
+4. Configure all files inside `./storage/` (automatically generated)
 6. Type `rs` into the console or restart the process
 
+## Setup for development
+1. Follow the [Setup](#setup) section until 2nd step.
+2. Use `npm run dev` to run without creating an output dir (autorestart on file changes)
 
 ## Thanks To... ✨
 <table>

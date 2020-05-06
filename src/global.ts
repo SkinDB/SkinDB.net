@@ -1,0 +1,269 @@
+import { addHyphensToUUID } from './utils';
+
+/* SpraxAPI */
+export interface SpraxAPIcfg {
+  readonly listen: {
+    readonly usePath: boolean,
+    readonly path: string,
+
+    readonly host: string,
+    readonly port: number
+  }
+
+  readonly trustProxy: boolean;
+
+  readonly logging: {
+    readonly accessLogFormat: string;
+    readonly discordErrorWebHookURL: string | null;
+  }
+
+  readonly web: {
+    readonly serveStatic: boolean;
+  }
+
+  readonly spraxAPI: {
+    readonly useUnixSocket: boolean;
+    readonly unixSocketAbsolutePath: string;
+  }
+}
+
+export interface SpraxAPIdbCfg {
+  readonly enabled: boolean;
+  readonly host: string;
+  readonly port: number;
+  readonly user: string;
+  readonly password: string;
+  readonly ssl: boolean;
+  readonly connectionPoolSize: number;
+
+  readonly databases: {
+    readonly skindb: string;
+  };
+}
+
+export interface UserAgent {
+  readonly id: number;
+  readonly name: string;
+  readonly internal: boolean;
+}
+
+export interface Skin {
+  readonly id: string;
+  readonly duplicateOf?: string;
+  readonly originalURL?: string;
+  readonly textureValue?: string;
+  readonly textureSignature?: string;
+  readonly added: Date;
+  readonly addedBy: number;
+  readonly cleanHash?: string;
+}
+
+export interface Cape {
+  readonly id: string;
+  readonly duplicateOf?: string;
+  readonly type: CapeType;
+  readonly originalURL: string;
+  readonly addedBy: number;
+  readonly added: Date;
+  readonly cleanHash?: string;
+  readonly textureValue?: string;
+  readonly textureSignature?: string;
+}
+
+/* SkinDB */
+export interface SkinDBAccount {
+  readonly user: CleanMinecraftUser;
+  readonly skinHistory: {
+    readonly lastTen: number[];
+    readonly total: number;
+  }
+}
+
+export interface SkinDBSkin {
+  readonly skin: Skin;
+  readonly seen_on: { name: string, id: string }[];
+}
+
+export interface SkinDBSearch {
+  profiles: {
+    direct: { name: string, id: string } | null,
+    indirect: { name: string, id: string }[]
+  }
+}
+
+/**
+ * value equals remote database enum
+*/
+export enum CapeType {
+  MOJANG = 'MOJANG',
+  OPTIFINE = 'OPTIFINE',
+  LABYMOD = 'LABYMOD'
+}
+
+export enum SkinArea {
+  HEAD = 'HEAD',
+  BODY = 'BODY'
+}
+
+/* Minecraft */
+export interface CleanMinecraftUser {
+  id: string;
+  id_hyphens: string;
+  name: string;
+  legacy: boolean | null;
+  textures: {
+    skinURL: string | null;
+    capeURL: string | null;
+    texture_value: string | null;
+    texture_signature: string | null
+  };
+  name_history?: MinecraftNameHistoryElement[];
+}
+
+export class MinecraftUser {
+  id: string;
+  name: string;
+  legacy: boolean | null;
+
+  skinURL: string | null = null;
+  capeURL: string | null = null;
+  textureValue: string | null = null;
+  textureSignature: string | null = null;
+
+  modelSlim: boolean = false;
+
+  nameHistory: MinecraftNameHistoryElement[];
+  userAgent: UserAgent;
+
+  constructor(profile: MinecraftProfile, nameHistory: MinecraftNameHistoryElement[], userAgent: UserAgent, profileFromMojang: boolean = false) {
+    this.id = profile.id;
+    this.name = profile.name;
+    this.legacy = profile.legacy || (profileFromMojang ? false : null);
+    this.nameHistory = nameHistory;
+    this.userAgent = userAgent;
+
+    for (const prop of profile.properties) {
+      if (prop.name == 'textures') {
+        this.textureValue = prop.value;
+        this.textureSignature = prop.signature || null;
+
+        const json: MinecraftProfileTextureProperty = MinecraftUser.extractMinecraftProfileTextureProperty(prop.value);
+        this.skinURL = json.textures.SKIN?.url || null;
+        this.capeURL = json.textures.CAPE?.url || null;
+        this.modelSlim = json.textures.SKIN?.metadata?.model == 'slim' || false;
+      }
+    }
+  }
+
+  getSecureSkinURL(): string | null {
+    if (!this.skinURL) return null;
+
+    return MinecraftUser.getSecureURL(this.skinURL);
+  }
+
+  static getSecureURL(skinURL: string): string {
+    if (!skinURL.toLowerCase().startsWith('http://')) return skinURL;
+
+    return 'https' + skinURL.substring(4);
+  }
+
+  getSecureCapeURL(): string | null {
+    if (!this.capeURL) return null;
+    if (!this.capeURL.toLowerCase().startsWith('http://')) return this.capeURL;
+
+    return 'https' + this.capeURL.substring(4);
+  }
+
+  getOptiFineCapeURL(): string {
+    return `http://s.optifine.net/capes/${this.name}.png`;
+  }
+
+  getLabyModCapeURL(): string {
+    return `http://capes.labymod.net/capes/${addHyphensToUUID(this.id)}`;
+  }
+
+  /**
+   * @author NudelErde (https://github.com/NudelErde/)
+   */
+  isAlexDefaultSkin(): boolean {
+    return ((parseInt(this.id[7], 16) ^ parseInt(this.id[15], 16) ^ parseInt(this.id[23], 16) ^ parseInt(this.id[31], 16)) & 1) == 1;
+  }
+
+  toCleanJSON(): CleanMinecraftUser {
+    return {
+      id: this.id,
+      id_hyphens: addHyphensToUUID(this.id),
+      name: this.name,
+      legacy: this.legacy,
+
+      textures: {
+        skinURL: this.skinURL,
+        capeURL: this.capeURL,
+
+        texture_value: this.textureValue,
+        texture_signature: this.textureSignature || null,
+      },
+
+      name_history: this.nameHistory
+    };
+  }
+
+  toOriginal(): MinecraftProfile {
+    let properties: MinecraftProfileProperty[] = [];
+
+    if (this.textureValue) {
+      properties.push({
+        name: 'textures',
+        value: this.textureValue,
+        signature: this.textureSignature || undefined
+      });
+    }
+
+    return {
+      id: this.id,
+      name: this.name,
+      properties,
+      legacy: this.legacy ? true : undefined
+    };
+  }
+
+  static extractMinecraftProfileTextureProperty(textureValue: string): MinecraftProfileTextureProperty {
+    return JSON.parse(Buffer.from(textureValue, 'base64').toString('utf-8'));
+  }
+}
+
+export interface MinecraftProfile {
+  id: string,
+  name: string,
+  properties: MinecraftProfileProperty[],
+  legacy?: boolean
+}
+
+export interface MinecraftProfileProperty {
+  name: 'textures',
+  value: string,
+  signature?: string
+}
+
+export interface MinecraftProfileTextureProperty {
+  timestamp: number,
+  profileId: string,
+  profileName: string,
+  signatureRequired?: boolean,
+  textures: {
+    SKIN?: {
+      url: string,
+      metadata?: {
+        model?: 'slim'
+      }
+    },
+    CAPE?: {
+      url: string
+    }
+  }
+}
+
+export interface MinecraftNameHistoryElement {
+  name: string;
+  changedToAt?: number;
+}

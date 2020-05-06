@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de" class="h-100">
+
+<head>
+  <%0- _HEAD %0>
+
+  <title>SkinDB.net — Searchable Minecraft skin database</title>
+</head>
+
+<body class="d-flex flex-column h-100 dark-body text-light">
+  <!--?{DarkTheme:dark-body text-light?:?}-->
+  <%0- _HEADER %0>
+
+  <main style="margin-bottom: 2rem">
+    <div class="container">
+      <%0- _SEARCH %0>
+      <br>
+
+      <div class="row row-equal">
+        <div class="col-md-3">
+          <div class="card-skin text-dark text-center">
+            <img class="img-fluid mx-auto d-block"
+              src="https://api.sprax2013.de/mc/skin/x-url/body/3d?size=180&url=https://cdn.skindb.net/skins/<%2= page.skin.skin.id %2>">
+
+            <hr>
+
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <i class="material-icons" aria-hidden="true">list</i> ? <!-- TODO -->
+              </li>
+
+              <li class="list-inline-item">
+                <i class="material-icons" aria-hidden="true">star</i> ? <!-- TODO -->
+              </li>
+
+              <li class="list-inline-item">
+                <i class="material-icons" aria-hidden="true">people</i> ? <!-- TODO -->
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-1 d-none d-md-block"></div>
+
+        <div class="col">
+          <div>
+            <div class="card-white text-dark">
+              <div class="card-title">
+                <h3>Tags</h3>
+              </div>
+              <hr class="w-95">
+
+              <div class="card-content">
+                <!-- TODO: Prepare search -->
+                <b><i>Coming Soon!</i></b>
+                <!-- <a href="#" class="btn button-tag a-stealth">Mann</a> -->
+              </div>
+            </div>
+
+            <div class="card-white text-dark">
+              <div class="card-title">
+                <h3>Öffentlichen Listen (0 Private)</h3>
+              </div>
+              <hr class="w-95">
+
+              <div class="card-content">
+                <i>In keiner Liste verwendet</i>
+              </div>
+            </div>
+
+            <div class="card-white text-dark">
+              <div class="card-title">
+                <h3>Spieler, die mit diesem Skin gesehen wurden</h3>
+              </div>
+              <hr class="w-95">
+
+              <!-- TODO: Make div scrollable and don't show all users by default -->
+              <div class="card-content">
+                <%2- page.skin.seen_on.map((el) => { return `<a href="<%0- global.url.base %0>/account/${el.id}">${el.name}</a>`; }).join(',\n                '); %2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <%0- _FOOTER %0>
+</body>
+
+</html>

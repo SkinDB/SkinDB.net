@@ -1,0 +1,4 @@
+Contact: mailto:contact@skindb.net
+Contact: mailto:contact@sprax2013.de
+Preferred-Languages: de, en
+Canonical: https://skindb.net/.well-known/security.txt
