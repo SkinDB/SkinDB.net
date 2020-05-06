@@ -16,33 +16,37 @@
       <%0- _SEARCH %0>
       <br>
 
-      Ungefähr 218.000.000 Ergebnisse (0,50 Sekunden)
+      <!-- TODO: Ungefähr 218.000.000 Ergebnisse (0,50 Sekunden) -->
       <div class="row">
         <div class="col">
           <div class="card-white text-dark">
-            <a href="#">
-              <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/Sprax/head?size=32">
-              Sprax (Direct match)
-            </a>
+            <%2 if (page.search.profiles.direct) { -%2>
+              <a href="<%0- global.url.base %0>/account/<%2= page.search.profiles.direct.id %2>">
+                <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/<%2= page.search.profiles.direct.id %2>/head?size=32">
+                <%2= page.search.profiles.direct.name %2> (Direct match)
+              </a>
+            <%2 } -%2>
 
             <hr>
 
             <div class="small">
-              <a href="#">
-                <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/Sprax2013/head?size=24">
-                Sprax (Indirect match)
-              </a>
 
-              <hr>
 
-              <a href="#">
-                <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/sprax_/head?size=24">
-                Sprax_ (Indirect match)
-              </a>
+              <%2 for (let i = 0; i < page.search.profiles.indirect.length; i++) { -%2>
+                <%2 if (i == 2) break; -%2>
+                <%2 const profile = page.search.profiles.indirect[i]; -%2>
+                <a href="<%0- global.url.base %0>/account/<%2= profile.id %2>">
+                  <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/<%2= profile.id %2>/head?size=24">
+                  <%2= profile.name %2>&nbsp;(Indirect match)
+                </a>
 
-              <hr>
+                <%2 if(i == 1) -%2>
+                  <hr>
+              <%2 } -%2>
 
-              <a href="">Load more...</a>
+              <!-- <hr> -->
+
+              <!-- TODO: <a href="">Load more...</a> -->
             </div>
           </div>
         </div>

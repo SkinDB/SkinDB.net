@@ -17,12 +17,11 @@ export async function getSkin(skinID: string): Promise<SkinDBSkin> {
 }
 
 export async function getSearch(query: string): Promise<SkinDBSearch> {
-  return getFromAPI(`search`, { query }) as Promise<SkinDBSearch>;
+  return getFromAPI(`search?q=${encodeURIComponent(query)}`) as Promise<SkinDBSearch>;
 }
 
 async function getFromAPI(urlSuffix: string, body?: object): Promise<object> {
   return new Promise((resolve, reject) => {
-
 
     request(`${baseURL}/skindb/frontend/${urlSuffix}`, {
       jar: true, gzip: true,
