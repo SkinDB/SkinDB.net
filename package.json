@@ -9,7 +9,7 @@
     "build": "tsc",
     "start": "cross-env NODE_ENV=production nodemon build/index.js",
     "devStart": "cross-env NODE_ENV=development ts-node src/index.ts",
-    "dev": "nodemon --ext ts --watch ./src --exec \"npm run devStart\""
+    "dev": "nodemon --ext ts,html --watch ./src --watch ./resources/web/dynamic --exec \"npm run devStart\""
   },
   "author": "Sprax2013",
   "license": "MIT",
@@ -43,8 +43,10 @@
     "typescript": "^3.8.3"
   },
   "nodemonConfig": {
+    "ext": "js,html",
     "watch": [
-      "build"
+      "build",
+      "resources/web/dynamic"
     ]
   }
 }
