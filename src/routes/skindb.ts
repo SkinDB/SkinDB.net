@@ -12,7 +12,7 @@ router.all('/', (req, res, next) => {
     get: () => {
       getTopThisWeek()
         .then((index) => {
-          const result = render(PageParts.INDEX, { page: { index } });
+          const result = render(PageParts.INDEX, req, { index });
 
           res.type('html')
             .send(result);
@@ -29,7 +29,7 @@ router.all('/account/:uuid?', (req, res, next) => {
     get: () => {
       getAccount(req.params.uuid)
         .then((account) => {
-          const result = render(PageParts.ACCOUNT, { page: { account } });
+          const result = render(PageParts.ACCOUNT, req, { account });
 
           res.type('html')
             .send(result);
@@ -47,7 +47,7 @@ router.all('/skin/:skinID?', (req, res, next) => {
     get: () => {
       getSkin(req.params.skinID)
         .then((skin) => {
-          const result = render(PageParts.SKIN, { page: { skin } });
+          const result = render(PageParts.SKIN, req, { skin });
 
           res.type('html')
             .send(result);
@@ -61,7 +61,7 @@ router.all(['/cape', '/cape.html'], (req, res, next) => {
   restful(req, res, {
     get: () => {
       res.type('html')
-        .send(render(PageParts.CAPE));
+        .send(render(PageParts.CAPE, req));
     }
   });
 });
@@ -70,7 +70,7 @@ router.all(['/history', '/history.html'], (req, res, next) => {
   restful(req, res, {
     get: () => {
       res.type('html')
-        .send(render(PageParts.HISTORY));
+        .send(render(PageParts.HISTORY, req));
     }
   });
 });
@@ -83,7 +83,7 @@ router.all('/search', (req, res, next) => {
       getSearch(req.query.q as string)
         .then((searchRes) => {
           res.type('html')
-            .send(render(PageParts.SEARCH, { page: { search: searchRes } }));
+            .send(render(PageParts.SEARCH, req, { search: searchRes }));
         })
         .catch(next);
     }

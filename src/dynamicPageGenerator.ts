@@ -3,6 +3,7 @@ import ejs = require('ejs');
 
 import { readFileSync } from 'fs';
 import { SkinDBAccount, SkinDBSkin, SkinDBSearch, SkinDBIndex } from './global';
+import { Request } from 'express';
 
 const dynamicWebPath = path.join(__dirname, '..', 'resources', 'web', 'dynamic');
 
@@ -42,15 +43,28 @@ export const PageParts: { [key: string]: string } = {
 }
 
 interface PageData {
-  page: {
-    account?: SkinDBAccount,
-    skin?: SkinDBSkin,
-    search?: SkinDBSearch,
-    index?: SkinDBIndex
-  }
+  account?: SkinDBAccount,
+  skin?: SkinDBSkin,
+  search?: SkinDBSearch,
+  index?: SkinDBIndex
 };
 
-//TODO: remove debug (default value for data)
-export function render(html: string, data: PageData = { page: {} }): string {
+//TODO: remove debug (default value for pageData)
+export function render(html: string, req: Request, pageData: PageData = {}): string {
+  const data: { page: PageData, con: { query: { [key: string]: string }, isDarkTheme: boolean } } = {
+    page: pageData,
+    con: { query: {}, isDarkTheme: true }
+  }
+
+  for (const key in req.query) {
+    if (req.query.hasOwnProperty(key)) {
+      const value = req.query[key];
+
+      if (typeof value == 'string') {
+        data.con.query[key] = value;
+      }
+    }
+  }
+
   return ejs.render(html, data, ejsSettings.LVL_TWO) as string;
 }

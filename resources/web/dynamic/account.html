@@ -7,8 +7,7 @@
   <title>SkinDB.net — Searchable Minecraft skin database</title>
 </head>
 
-<body class="d-flex flex-column h-100 dark-body text-light">
-  <!--?{DarkTheme:dark-body text-light?:?}-->
+<body class="d-flex flex-column h-100 <%2 if(con.isDarkTheme){ %2>dark-body text-light<%2 } %2>">
   <%0- _HEADER %0>
 
   <!-- TODO: Missing headline in format like 'Profile for Sprax2013' -->

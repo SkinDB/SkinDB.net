@@ -7,8 +7,7 @@
   <title>SkinDB.net — Searchable Minecraft skin database</title>
 </head>
 
-<body class="d-flex flex-column h-100 dark-body text-light">
-  <!--?{DarkTheme:dark-body text-light?:?}-->
+<body class="d-flex flex-column h-100 <%2 if(con.isDarkTheme){ %2>dark-body text-light<%2 } %2>">
   <%0- _HEADER %0>
 
   <main style="margin-bottom: 2rem">
@@ -30,8 +29,6 @@
             <hr>
 
             <div class="small">
-
-
               <%2 for (let i = 0; i < page.search.profiles.indirect.length; i++) { -%2>
                 <%2 if (i == 2) break; -%2>
                 <%2 const profile = page.search.profiles.indirect[i]; -%2>
