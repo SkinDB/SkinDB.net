@@ -25,6 +25,11 @@ export interface SpraxAPIcfg {
     readonly useUnixSocket: boolean;
     readonly unixSocketAbsolutePath: string;
   }
+
+  readonly mcAuth: {
+    readonly clientID: string;
+    readonly clientSecret: string;
+  }
 }
 
 export interface SpraxAPIdbCfg {

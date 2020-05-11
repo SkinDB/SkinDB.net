@@ -51,9 +51,15 @@ interface PageData {
 
 //TODO: remove debug (default value for pageData)
 export function render(html: string, req: Request, pageData: PageData = {}): string {
-  const data: { page: PageData, con: { query: { [key: string]: string }, isDarkTheme: boolean } } = {
+  const data: { page: PageData, con: { query: { [key: string]: string }, isDarkTheme: boolean, isLoggedIn: boolean, session: object, url: string } } = {
     page: pageData,
-    con: { query: {}, isDarkTheme: true }
+    con: {
+      query: {},
+      isDarkTheme: true,
+      isLoggedIn: !!(req.session as any).data,
+      session: (req.session as any).data,
+      url: encodeURIComponent(global.url.base + (req.originalUrl.indexOf('?') >= 0 ? req.originalUrl.substring(0, req.originalUrl.indexOf('?')) : req.originalUrl))
+    }
   }
 
   for (const key in req.query) {

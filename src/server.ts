@@ -1,4 +1,5 @@
 import express = require('express');
+import expressSess = require('express-session');
 import morgan = require('morgan');
 import path = require('path');
 
@@ -40,6 +41,15 @@ app.use((req, _res, next) => {
 
   next();
 });
+
+app.use(expressSess({
+  name: 'sessID',
+  secret: 'key*board catz',
+  resave: false,
+  unset: 'destroy',
+  saveUninitialized: true,
+  cookie: { secure: true, httpOnly: true, maxAge: 30 * 24 * 60 * 60 }
+}))
 
 // Default response headers
 app.use((_req, res, next) => {

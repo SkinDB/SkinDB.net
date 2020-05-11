@@ -9,32 +9,32 @@
       <ul class="navbar-nav mr-auto"></ul>
 
       <ul class="navbar-nav" style="align-items: center">
-        <!--        ?{LoggedIn:-->
-        <!--        <li class="nav-item dropdown">-->
-        <!--          <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown"-->
-        <!--             aria-haspopup="true" aria-expanded="false">-->
-        <!--            ${LOC:html.header.logged_in_as}-->
-        <!--            <img src="https://api.sprax2013.de/mc/skin/${Minecraft_UUID}/head?size=64"-->
-        <!--                 style="width: auto; height: 2.5rem; border-radius: 25px; border: 3px solid #F27405"-->
-        <!--                 alt="${LOC:html.header.your_minecraft_face}">-->
-        <!--          </a>-->
+        <%2 if(con.isLoggedIn) { %2>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+                Logged in as <%2= con.session.mc.name %2>
+                <img src="https://api.sprax2013.de/mc/skin/<%2- con.session.id %2>/head?size=64"
+                  style="width: auto; height: 2.5rem; border-radius: 25px; border: 3px solid #F27405"
+                  alt="Your Minecraft face">
+            </a>
 
-        <!--          <div class="dropdown-menu" aria-labelledby="profileDropdown">-->
-        <!--            <a class="dropdown-item" href="<%0- global.url.base %0>/settings">-->
-        <!--              <i class="fas fa-cog" aria-hidden="true"></i> ${LOC:words.settings}-->
-        <!--            </a>-->
-        <!--            <a class="dropdown-item" href="<%0- global.url.base %0>/logout?returnTo=${URL_CURRENT_ENCODED}">-->
-        <!--              <i class="fas fa-sign-out-alt" aria-hidden="true"></i> ${LOC:words.logout}-->
-        <!--            </a>-->
-        <!--          </div>-->
-        <!--        </li>-->
-        <!--        ?:-->
-        <li class="nav-item">
-          <a class="nav-link" href="<%0- global.url.base %0>/login?returnTo=${URL_CURRENT_ENCODED}">
-            Login
-          </a>
-        </li>
-        <!--        ?}-->
+            <div class="dropdown-menu" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="<%0- global.url.base %0>/settings">
+                <i class="fas fa-cog" aria-hidden="true"></i> Settings
+              </a>
+              <a class="dropdown-item" href="<%0- global.url.base %0>/logout?returnTo=<%2- con.url %2>">
+                <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout
+              </a>
+            </div>
+          </li>
+        <%2 } else { %2>
+          <li class="nav-item">
+            <a class="nav-link" href="<%0- global.url.base %0>/login?returnTo=<%2- con.url %2>">
+              Login
+            </a>
+          </li>
+        <%2 } %2>
 
         <li class="nav-item">
           <a class="nav-link" href="#" onclick="toggleDarkMode(event)"
@@ -50,11 +50,11 @@
           </a>
 
           <div class="dropdown-menu dropdown-menu-right langDropdown" aria-labelledby="langDropdown">
-            <a class="dropdown-item" href="<%0- global.url.base %0>/language?lang=de&returnTo=${URL_CURRENT_ENCODED}">
+            <a class="dropdown-item" href="<%0- global.url.base %0>/language?lang=de&returnTo=<%2- con.url %2>">
               <span class="flag-icon flag-icon-de"></span> Deutsch
             </a>
 
-            <a class="dropdown-item" href="<%0- global.url.base %0>/language?lang=en&returnTo=${URL_CURRENT_ENCODED}">
+            <a class="dropdown-item" href="<%0- global.url.base %0>/language?lang=en&returnTo=<%2- con.url %2>">
               <span class="flag-icon flag-icon-us"></span> English
             </a>
           </div>

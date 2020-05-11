@@ -29,6 +29,10 @@ export let cfg: SpraxAPIcfg = {
   spraxAPI: {
     useUnixSocket: false,
     unixSocketAbsolutePath: '/tmp/SpraxAPI.unixSocket'
+  },
+  mcAuth: {
+    clientID: '',
+    clientSecret: ''
   }
 };
 export let dbCfg: SpraxAPIdbCfg = {
