@@ -56,8 +56,8 @@ export function render(html: string, req: Request, pageData: PageData = {}): str
     con: {
       query: {},
       isDarkTheme: true,
-      isLoggedIn: !!(req.session as any).data,
-      session: (req.session as any).data,
+      isLoggedIn: req.session && req.session.data,
+      session: req.session ? req.session.data : null,
       url: encodeURIComponent(global.url.base + (req.originalUrl.indexOf('?') >= 0 ? req.originalUrl.substring(0, req.originalUrl.indexOf('?')) : req.originalUrl))
     }
   }

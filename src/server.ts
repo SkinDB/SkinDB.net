@@ -1,13 +1,15 @@
 import express = require('express');
 import expressSess = require('express-session');
+import expressSessPsql = require('connect-pg-simple');
 import morgan = require('morgan');
 import path = require('path');
 
 import { skindbExpressRouter } from './routes/skindb';
 import { statusExpressRouter } from './routes/status';
 
-import { cfg, webAccessLogStream } from '.';
+import { cfg, db, webAccessLogStream } from '.';
 import { ErrorBuilder, ApiError, HttpError } from './utils';
+import { Pool } from 'pg';
 
 export const app = express();
 app.disable('x-powered-by');
@@ -44,12 +46,17 @@ app.use((req, _res, next) => {
 
 app.use(expressSess({
   name: 'sessID',
+  store: db.isAvailable() ? new (expressSessPsql(expressSess))({
+    pool: db.getPool() as Pool,
+    tableName: 'sessions',
+    pruneSessionInterval: 60 * 60 * 24 /*24h*/
+  }) : undefined,
   secret: 'key*board catz',
   resave: false,
   unset: 'destroy',
-  saveUninitialized: true,
-  cookie: { secure: true, httpOnly: true, maxAge: 30 * 24 * 60 * 60 }
-}))
+  saveUninitialized: false,
+  cookie: { secure: true, httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 /*30d*/ }
+}));
 
 // Default response headers
 app.use((_req, res, next) => {
@@ -57,7 +64,7 @@ app.use((_req, res, next) => {
     // 'Access-Control-Allow-Origin': '*',
     // 'Access-Control-Allow-Headers': 'User-Agent,Authorization,If-None-Match,Content-Type,If-Unmodified-Since',
 
-    'Cache-Control': 'public, s-maxage=30, max-age=30'
+    // 'Cache-Control': 'public, s-maxage=30, max-age=30'
   });
 
   next();

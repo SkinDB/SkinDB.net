@@ -92,12 +92,17 @@ router.all('/search', (req, res, next) => {
   });
 });
 
-
 router.all('/login', (req, res, next) => {
   restful(req, res, {
     get: () => {
-      if ((req.session as any).mcID) return res.send('Already Loggin as ' + (req.session as any).mcID);
+      // Already logged in
+      if (req.session && req.session.data) {
+        const returnTo = (req.query.returnTo as string || '').toLowerCase();
 
+        return res.redirect(returnTo.startsWith(global.url.base) ? returnTo : global.url.base);
+      }
+
+      // Returning from Mc-Auth.com
       if (req.query.code || req.query.error) {
         if (req.query.error) {
           return res.send(`Login failed!\nerror: ${req.query.error}\nerror-description: ${req.query.error_description}`); //TODO
@@ -110,7 +115,7 @@ router.all('/login', (req, res, next) => {
             code: req.query.code,
             client_id: cfg.mcAuth.clientID,
             client_secret: cfg.mcAuth.clientSecret,
-            redirect_uri: `${global.url.base}/login`,
+            redirect_uri: `${global.url.base}/login${req.query.returnTo ? `?returnTo=${req.query.returnTo}` : ''}`,
             grant_type: 'authorization_code'
           })
         }, (err, httpRes, body) => {
@@ -119,19 +124,49 @@ router.all('/login', (req, res, next) => {
           body = JSON.parse(body);
 
           if (httpRes.statusCode == 200 && body.data && body.data.profile) {
-            // res.cookie('mcProfile', body['data']['profile'], { httpOnly: true, secure: secureCookies });
+            if (!req.session) return res.send('Login failed!'); // TODO
 
             // TODO: Update mc inside session periodically
-            (req.session as any).data = { id: body.data.profile.id, mc: body.data.profile };
-            // TODO
-            return res.send(`success!\n${JSON.stringify(body.data.profile, null, 4)}`);
-          }
+            // TODO: Render mc-skin or logged in user (header) by URL instead of UUID
+            req.session.data = { id: body.data.profile.id, mc: body.data.profile };
 
-          // TODO
-          return res.send('Failure');
+
+            // Successful
+            req.session.save((err) => {
+              if (err) return res.send('Login failed!');  // TODO
+
+              const returnTo = (req.query.returnTo as string || '').toLowerCase();
+
+              return res.redirect(returnTo.startsWith(global.url.base) ? req.query.returnTo as string : global.url.base);
+            });
+          } else {
+            // TODO: Show HTML
+            return res.send('Login failed!');
+          }
         });
       } else {
-        return res.redirect(`https://mc-auth.com/oauth2/authorize?response_type=code&client_id=${cfg.mcAuth.clientID}&scope=profile&redirect_uri=${global.url.base}/login`);
+        // Redirect client to Mc-Auth.com
+        return res.redirect(`https://mc-auth.com/oauth2/authorize?response_type=code&client_id=${cfg.mcAuth.clientID}&scope=profile&redirect_uri=${encodeURIComponent(`${global.url.base}/login${req.query.returnTo ? `?returnTo=${req.query.returnTo}` : ''}`)}`);
+      }
+    }
+  });
+});
+
+router.all('/logout', (req, res, next) => {
+  restful(req, res, {
+    get: () => {
+      const returnTo = (req.query.returnTo as string || '').toLowerCase();
+
+      if (req.session) {
+        req.session.data = null;
+
+        req.session.destroy((err) => {
+          if (err) return res.send('Logout failed!'); // TODO
+
+          return res.redirect(returnTo.startsWith(global.url.base) ? returnTo : global.url.base);
+        });
+      } else {
+        return res.redirect(returnTo.startsWith(global.url.base) ? returnTo : global.url.base);
       }
     }
   });

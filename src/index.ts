@@ -42,7 +42,7 @@ export let dbCfg: SpraxAPIdbCfg = {
   user: 'user007',
   password: 's3cr3t!',
   ssl: false,
-  connectionPoolSize: 16,
+  connectionPoolSize: 8,
 
   databases: {
     skindb: 'skindb'
