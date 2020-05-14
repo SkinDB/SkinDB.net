@@ -229,6 +229,10 @@ body {
     z-index: 4;
 }
 
+.bg-lightgreen {
+    background-color:lightgreen !important;
+}
+
 .button-tag {
     background-color: white;
     text-align: center;

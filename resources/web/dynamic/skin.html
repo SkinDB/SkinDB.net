@@ -50,9 +50,12 @@
               <hr class="w-95">
 
               <div class="card-content">
-                <!-- TODO: Prepare search -->
-                <b><i>Coming Soon!</i></b>
-                <!-- <a href="#" class="btn button-tag a-stealth">Mann</a> -->
+                <!-- TODO: Prepare search instead of redirect -->
+                <!-- TODO: Make sure users understand what the colors on the tags mean! -->
+                <%2 for (const tag of page.skin.tags) { -%2>
+                  <!-- TODO: onHover: Show report button so users can say they don't agree with this tag -->
+                  <a href="<%0- global.url.base %0>/search?q=<%2= tag.name %2>" class="btn button-tag a-stealth bg-lightgreen"><%2= tag.name %2></a>
+                <%2 } -%2>
               </div>
             </div>
 
