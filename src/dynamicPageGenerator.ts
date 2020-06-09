@@ -45,14 +45,17 @@ interface PageData {
 
 //TODO: remove debug (default value for param pageData)
 export function render(html: string, req: Request, pageData: PageData = {}): string {
-  const data: { page: PageData, con: { query: { [key: string]: string }, isDarkTheme: boolean, isLoggedIn: boolean, session: object, url: string } } = {
+  const currURL = global.url.base + (req.originalUrl.indexOf('?') >= 0 ? req.originalUrl.substring(0, req.originalUrl.indexOf('?')) : req.originalUrl);
+
+  const data: { page: PageData, con: { query: { [key: string]: string }, isDarkTheme: boolean, isLoggedIn: boolean, session: object, url: string, urlEncoded: string } } = {
     page: pageData,
     con: {
       query: {},
       isDarkTheme: true,
       isLoggedIn: req.session && req.session.data,
       session: req.session ? req.session.data : null,
-      url: encodeURIComponent(global.url.base + (req.originalUrl.indexOf('?') >= 0 ? req.originalUrl.substring(0, req.originalUrl.indexOf('?')) : req.originalUrl))
+      url: currURL,
+      urlEncoded: encodeURIComponent(currURL),
     }
   }
 

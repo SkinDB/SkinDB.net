@@ -23,14 +23,14 @@
               <a class="dropdown-item" href="<%0- global.url.base %0>/settings">
                 <i class="fas fa-cog" aria-hidden="true"></i> Settings
               </a>
-              <a class="dropdown-item" href="<%0- global.url.base %0>/logout?returnTo=<%2- con.url %2>">
+              <a class="dropdown-item" href="<%0- global.url.base %0>/logout?returnTo=<%2- con.urlEncoded %2>">
                 <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout
               </a>
             </div>
           </li>
         <%2 } else { %2>
           <li class="nav-item">
-            <a class="nav-link" href="<%0- global.url.base %0>/login?returnTo=<%2- con.url %2>">
+            <a class="nav-link" href="<%0- global.url.base %0>/login?returnTo=<%2- con.urlEncoded %2>">
               Login
             </a>
           </li>
@@ -49,15 +49,15 @@
             <i class="material-icons" aria-hidden="true">translate</i>
           </a>
 
-          <div class="dropdown-menu dropdown-menu-right langDropdown" aria-labelledby="langDropdown">
-            <a class="dropdown-item" href="<%0- global.url.base %0>/language?lang=de&returnTo=<%2- con.url %2>">
+          <!-- <div class="dropdown-menu dropdown-menu-right langDropdown" aria-labelledby="langDropdown">
+            <a class="dropdown-item" href="<%0- global.url.base %0>/language?lang=de&returnTo=<%2- con.urlEncoded %2>">
               <span class="flag-icon flag-icon-de"></span> Deutsch
             </a>
 
-            <a class="dropdown-item" href="<%0- global.url.base %0>/language?lang=en&returnTo=<%2- con.url %2>">
+            <a class="dropdown-item" href="<%0- global.url.base %0>/language?lang=en&returnTo=<%2- con.urlEncoded %2>">
               <span class="flag-icon flag-icon-us"></span> English
             </a>
-          </div>
+          </div> -->
         </li>
       </ul>
     </div>
