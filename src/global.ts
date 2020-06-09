@@ -96,8 +96,13 @@ export interface SkinDBSearch {
     readonly direct: { name: string, id: string } | null;
     readonly indirect: { name: string, matched_name: string, id: string }[];
   }
-}
 
+  readonly skins: {
+    readonly hits: Skin[];
+    readonly page: number;
+    readonly hasNextPage: boolean;
+  }
+}
 
 export interface SkinDBIndex {
   top_ten: { id: string, count: number }[];

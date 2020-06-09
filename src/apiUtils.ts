@@ -16,8 +16,8 @@ export async function getSkin(skinID: string): Promise<SkinDBSkin> {
   return getFromAPI(`skin/${encodeURIComponent(skinID)}`) as Promise<SkinDBSkin>;
 }
 
-export async function getSearch(query: string): Promise<SkinDBSearch> {
-  return getFromAPI(`search?q=${encodeURIComponent(query)}`) as Promise<SkinDBSearch>;
+export async function getSearch(query: string, page: number | string): Promise<SkinDBSearch> {
+  return getFromAPI(`search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(page)}`) as Promise<SkinDBSearch>;
 }
 
 async function getFromAPI(urlSuffix: string, body?: object): Promise<object> {

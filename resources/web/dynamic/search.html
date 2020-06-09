@@ -56,148 +56,45 @@
         </div>
       <%2 } -%2>
 
-      <%2 if (false) { -%2>
+      <%2 if (page.search.skins.hits.length > 0) { -%2>
         <div class="row row-equal">
-          <div class="col-md">
-            <div class="card-skin text-dark">
-              <img class="img-fluid mx-auto d-block"
-                src="https://api.sprax2013.de/mc/skin/x-url/body?size=100&url=https://cdn.skindb.net/skins/2258372184168727783">
-
-              <hr>
-
-              <ul class="list-inline text-center">
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">list</i> 3
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">star</i> 69
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">people</i> 420
-                </li>
-              </ul>
+        <%2 for (let i = 0; i < page.search.skins.hits.length; i++) { -%2>
+          <%2 if(i % 6 == 0) { -%2>
+            <%2 if(i != 0) -%2>
             </div>
-          </div>
 
-          <div class="col-md">
-            <div class="card-skin text-dark">
-              <img class="img-fluid mx-auto d-block"
-                src="https://api.sprax2013.de/mc/skin/x-url/body?size=100&url=https://cdn.skindb.net/skins/2258372184168727783">
+            <div class="row row-equal">
+          <%2 } -%2>
 
-              <hr>
+          <%2 const skin = page.search.skins.hits[i]; -%2>
+            <div class="col-md">
+              <a href="<%0- global.url.base %0>/skin/<%2- skin.id %2>">
+                <div class="card-skin text-dark">
+                  <img class="img-fluid mx-auto d-block"
+                    src="https://api.sprax2013.de/mc/skin/x-url/body?size=100&url=https://cdn.skindb.net/skins/<%2- skin.id %2>">
 
-              <ul class="list-inline text-center">
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">list</i> 3
-                </li>
+                  <hr>
 
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">star</i> 69
-                </li>
+                  <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                      <i class="material-icons" aria-hidden="true">list</i> ?
+                    </li>
 
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">people</i> 420
-                </li>
-              </ul>
+                    <li class="list-inline-item">
+                      <i class="material-icons" aria-hidden="true">star</i> ?
+                    </li>
+
+                    <li class="list-inline-item">
+                      <i class="material-icons" aria-hidden="true">people</i> ?
+                    </li>
+                  </ul>
+                </div>
+              </a>
             </div>
-          </div>
-
-          <div class="col-md">
-            <div class="card-skin text-dark">
-              <img class="img-fluid mx-auto d-block"
-                src="https://api.sprax2013.de/mc/skin/x-url/body?size=100&url=https://cdn.skindb.net/skins/2258372184168727783">
-
-              <hr>
-
-              <ul class="list-inline text-center">
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">list</i> 3
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">star</i> 69
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">people</i> 420
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="col-md">
-            <div class="card-skin text-dark">
-              <img class="img-fluid mx-auto d-block"
-                src="https://api.sprax2013.de/mc/skin/x-url/body?size=100&url=https://cdn.skindb.net/skins/2258372184168727783">
-
-              <hr>
-
-              <ul class="list-inline text-center">
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">list</i> 3
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">star</i> 69
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">people</i> 420
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="col-md">
-            <div class="card-skin text-dark">
-              <img class="img-fluid mx-auto d-block"
-                src="https://api.sprax2013.de/mc/skin/x-url/body?size=100&url=https://cdn.skindb.net/skins/2258372184168727783">
-
-              <hr>
-
-              <ul class="list-inline text-center">
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">list</i> 3
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">star</i> 69
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">people</i> 420
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="col-md">
-            <div class="card-skin text-dark">
-              <img class="img-fluid mx-auto d-block"
-                src="https://api.sprax2013.de/mc/skin/x-url/body?size=100&url=https://cdn.skindb.net/skins/2258372184168727783">
-
-              <hr>
-
-              <ul class="list-inline text-center">
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">list</i> 3
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">star</i> 69
-                </li>
-
-                <li class="list-inline-item">
-                  <i class="material-icons" aria-hidden="true">people</i> 420
-                </li>
-              </ul>
-            </div>
-          </div>
+          <%2 } -%2>
         </div>
 
-        <div class="d-none d-md-block">
+        <div class="d-none _disabled_d-md-block">
           <!-- Hidden on small devices -->
           <!-- TODO: Make sure paginator works on small devices -->
 
@@ -344,9 +241,16 @@
 
         <div class="row">
           <div class="col text-center">
-            <a href="#"><span class="encircle" style="font-size: 1.25rem;">&lt;</span></a>
-            1/69
-            <a href="#"><span class="encircle" style="font-size: 1.25rem;">&gt;</span></a>
+            <%2 const currPage = page.search.skins.page; %2>
+            <%2 const prevPage = currPage > 1 ? currPage - 1 : -1; -%2>
+            <%2 const nextPage = page.search.skins.hasNextPage ? currPage + 1 : -1; -%2>
+
+            <%2 const pageinatorUrlPrefix = `<%0= global.url.base %0>/search?q=${con.query.q || ''}${con.query.filter ? `&filter=${con.query.filter}` : ''}`; -%2>
+            <%2 const aDisabled = 'class="disabled" tabindex="-1" aria-disabled="true"'; -%2>
+
+            <a <%2- prevPage != -1 ? `href="${pageinatorUrlPrefix}&page=${prevPage}"` : ''; -%2> <%2- prevPage == -1 ? aDisabled : ''; -%2>><span class="encircle" style="font-size: 1.25rem;">&lt;</span></a>
+            Page <%2= currPage -%2>
+            <a <%2- nextPage != -1 ? `href="${pageinatorUrlPrefix}&page=${nextPage}"` : ''; -%2> <%2- nextPage == -1 ? aDisabled : ''; -%2>><span class="encircle" style="font-size: 1.25rem;">&gt;</span></a>
           </div>
         </div>
       <%2 } else { -%2>

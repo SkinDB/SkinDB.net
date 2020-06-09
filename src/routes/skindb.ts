@@ -82,7 +82,9 @@ router.all('/search', (req, res, next) => {
     get: () => {
       if (!req.query.q) return next(new ErrorBuilder().invalidParams('query', [{ param: 'q', condition: 'Valid string' }]));
 
-      getSearch(req.query.q as string)
+      const page = (req.query.page as string) || 1;
+
+      getSearch(req.query.q as string, page)
         .then((searchRes) => {
           res.type('html')
             .send(render(PageParts.SEARCH, req, { search: searchRes }));
