@@ -34,6 +34,10 @@
     margin-top: 2vh;
 }
 
+a.disabled {
+    cursor: default;
+}
+
 /* stretch .col-elements inside .row to equal the largest one */
 .row.display-flex {
     display: flex;
@@ -230,7 +234,11 @@ body {
 }
 
 .bg-lightgreen {
-    background-color:lightgreen !important;
+    background-color: lightgreen !important;
+}
+
+.bg-lavenderblush {
+    background-color: lavenderblush !important;
 }
 
 .button-tag {

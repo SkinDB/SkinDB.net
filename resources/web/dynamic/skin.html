@@ -56,6 +56,11 @@
                   <!-- TODO: onHover: Show report button so users can say they don't agree with this tag -->
                   <a href="<%0- global.url.base %0>/search?q=<%2= tag.name %2>" class="btn button-tag a-stealth bg-lightgreen"><%2= tag.name %2></a>
                 <%2 } -%2>
+
+                <%2 for (const tag of page.skin.aiTags) { -%2>
+                  <!-- TODO: onHover: Show report button so users can say they don't agree with this tag -->
+                  <a href="<%0- global.url.base %0>/search?q=<%2= tag.name %2>" class="btn button-tag a-stealth bg-lavenderblush"><%2= tag.name %2></a>
+                <%2 } -%2>
               </div>
             </div>
 
