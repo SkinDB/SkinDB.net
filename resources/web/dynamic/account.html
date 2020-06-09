@@ -19,7 +19,7 @@
       <div class="row row-equal">
         <div class="col-md-3">
           <div class="card-skin text-dark text-center">
-            <img class="img-fluid mx-auto d-block"
+            <img class="img-fluid mx-auto d-block" id="skin3D" alt="3D rendered Minecraft Skin"
               src="https://api.sprax2013.de/mc/skin/x-url/body/3d?size=128&url=https://cdn.skindb.net/skins/<%2= page.account.skinHistory.lastTen[0] %2>">
 
             <div class="card-skin-history text-center">
@@ -28,7 +28,8 @@
               <div class="card-content" style="font-size: 0">
                 <%2 for (const skinID of page.account.skinHistory.lastTen) { -%2>
                   <a href="<%0- global.url.base %0>/skin/<%2= skinID %2>">
-                    <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/x-url/head/3d?size=30&url=https://cdn.skindb.net/skins/<%2= skinID %2>">
+                    <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/x-url/head/3d?size=30&url=https://cdn.skindb.net/skins/<%2= skinID %2>"
+                      onmouseover="set3dSkin('<%2= skinID %2>')" alt="3D rendered Minecraft Head">
                   </a>
                   <%2 } -%2>
               </div>

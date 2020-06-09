@@ -122,6 +122,12 @@ body {
     padding-right: 5px;
 }
 
+/* #skin3D {
+    background: url('https://api.sprax2013.de/mc/skin/x-url/body/3d?size=180&url=https://cdn.skindb.net/skins/2327804526079247759') no-repeat;
+    width: 180px;
+    height: 329px;
+} */
+
 .card-white {
     background-color: white;
     border-radius: 10px;

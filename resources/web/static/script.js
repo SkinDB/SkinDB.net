@@ -19,5 +19,18 @@ function updateInputClear(inputElem) {
   }
 }
 
+function set3dSkin(skinID) {
+  const imgElem = document.getElementById('skin3D'),
+    imgURL = `https://api.sprax2013.de/mc/skin/x-url/body/3d?size=128&url=https://cdn.skindb.net/skins/${skinID}`;
+
+  if (imgElem && imgElem.src != imgURL) {
+    imgElem.src = '';
+
+    const img = new Image();
+    img.onload = () => imgElem.src = img.src;
+    img.src = imgURL;
+  }
+}
+
 // Run on done rendering?
 // updateInputClear(document.getElementById('search'));
