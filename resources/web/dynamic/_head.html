@@ -24,30 +24,37 @@
 <meta name="author" content="Sprax2013">
 
 <!-- TODO: SEO -->
-<meta name="twitter:title" content="SkinDB.net — Searchable Minecraft skin database">
-<!--  <meta name="twitter:description"-->
-<!--        content="Mc-Auth.com allows users to securely login with their Minecraft accounts without ever needing to enter their account password.">-->
-<!--  <meta name="twitter:url" content="<%0- global.url.base %0>">-->
-<meta name="twitter:image" content="<%0- global.url.static %0>/img/Logo_HD.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@SkinDBnet">
 <meta name="twitter:creator" content="@Sprax2013">
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="SkinDB.net — Searchable Minecraft skin database">
-<meta property="og:site_name" content="SkinDB.net">
-<!--  <meta property="og:description"-->
-<!--        content="Mc-Auth.com allows users to securely login with their Minecraft accounts without ever needing to enter their account password.">-->
-<meta property="og:image" content="<%0- global.url.static %0>/img/Logo_HD.png">
-<!--  <meta property="og:url" content="<%0- global.url.base %0>">-->
+<%2 if(page.account) { %2>
+  <meta property="og:type" content="profile">
+  <meta property="profile:username" content="<%2- page.account.user.name %2>">
 
-<!--  <script type="application/ld+json">-->
-<!--    {-->
-<!--      "@context": "http://schema.org",-->
-<!--      "@type": "Organization",-->
-<!--      "url": "<%0- global.url.base %0>",-->
-<!--      "logo": "<%0- global.url.static %0>/img/Logo_HD.png"-->
-<!--    }-->
-<!--  </script>-->
+  <meta property="og:title" content="View <%2- page.account.user.name %2>'s Minecraft Profile">
+  <meta property="og:description" content="View the history of Usernames, Skins, Capes and much more for <%2- page.account.user.name %2> and others!">
+  <meta property="og:image" content="https://api.sprax2013.de/mc/skin/x-url/head/3d?size=512&url=https://cdn.skindb.net/skins/<%2- page.account.skinHistory.lastTen[0] %2>">
+
+  <meta name="description" content="View the history of Usernames, Skins, Capes and much more for <%2- page.account.user.name %2> and others!">
+  <title><%2- page.account.user.name %2>'s Profile | SkinDB.net</title>
+<%2 } else { %2>
+  <meta property="og:type" content="website">
+
+  <meta property="og:title" content="SkinDB.net — Searchable Minecraft skin database">
+  <meta property="og:description" content="Easily search for your next Minecraft Skin or Cape - You can search for specific Usernames too!">
+  <meta property="og:image" content="<%0- global.url.static %0>/img/Logo_HD.png">
+<%2 } %2>
+<meta property="og:site_name" content="SkinDB.net">
+<meta property="og:url" content="<%2- con.url %2>">
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "url": "<%0- global.url.base %0>",
+    "logo": "<%0- global.url.static %0>/img/Logo_HD.png"
+  }
+</script>
 
 <script src="<%0- global.url.static %0>/script.js" defer></script>
