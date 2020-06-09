@@ -33,12 +33,16 @@
               </div>
             </div>
 
+            <%2 if(!con.isLoggedIn) { %2>
             <br>
 
             <b>Is this your Account?</b>
             <br><br>
-            <a href="#"><b>Login</b></a>
+            <a href="<%0- global.url.base %0>/login"><b>Login</b></a>
+            <hr>
+            <a href="<%0- global.url.base %0>/login"><b>Sign Up</b></a> <!-- TODO: Only show 'Sign Up' if account has never logged in befor -->
             <br><br>
+            <%2 } %2>
           </div>
         </div>
 
@@ -46,6 +50,10 @@
 
         <div class="col">
           <div class="card-account">
+            <section>
+              <h2><u><b><%2= page.account.user.name %2></b></u></h2>
+            </section>
+
             <section>
               <h3>UUID</h3>
 
