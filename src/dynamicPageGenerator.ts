@@ -21,12 +21,6 @@ const ejsSettings: { [key: string]: ejs.Options } = {
   LVL_TWO: { delimiter: '%2' }  /* Used when inserting/generating dynamic content */
 }
 
-// TODO: remove debug
-interface ejs_req {
-  isDarkTheme: boolean,
-  lang: { [key: string]: string }
-}
-
 const _HEAD = ejs.render(readFileSync(path.join(dynamicWebPath, '_head.html'), 'utf-8'), { global }, ejsSettings.LVL_ZERO) as string,
 
   _HEADER = ejs.render(readFileSync(path.join(dynamicWebPath, '_header.html'), 'utf-8'), { global }, ejsSettings.LVL_ZERO) as string,
@@ -49,7 +43,7 @@ interface PageData {
   index?: SkinDBIndex
 };
 
-//TODO: remove debug (default value for pageData)
+//TODO: remove debug (default value for param pageData)
 export function render(html: string, req: Request, pageData: PageData = {}): string {
   const data: { page: PageData, con: { query: { [key: string]: string }, isDarkTheme: boolean, isLoggedIn: boolean, session: object, url: string } } = {
     page: pageData,

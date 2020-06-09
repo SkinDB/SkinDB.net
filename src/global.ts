@@ -78,6 +78,7 @@ export interface Cape {
 /* SkinDB */
 export interface SkinDBAccount {
   readonly user: CleanMinecraftUser;
+
   readonly skinHistory: {
     readonly lastTen: number[];
     readonly total: number;
@@ -91,15 +92,15 @@ export interface SkinDBSkin {
 }
 
 export interface SkinDBSearch {
-  profiles: {
-    direct: { name: string, id: string } | null,
-    indirect: { name: string, id: string }[]
+  readonly profiles: {
+    readonly direct: { name: string, id: string } | null;
+    readonly indirect: { name: string, matched_name: string, id: string }[];
   }
 }
 
 
 export interface SkinDBIndex {
-  top_ten: { id: string, count: number }[]
+  top_ten: { id: string, count: number }[];
 }
 
 /**

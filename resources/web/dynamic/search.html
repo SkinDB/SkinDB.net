@@ -23,7 +23,7 @@
               <%2 if (page.search.profiles.direct) { -%2>
                 <a href="<%0- global.url.base %0>/account/<%2= page.search.profiles.direct.id %2>">
                   <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/<%2= page.search.profiles.direct.id %2>/head?size=32">
-                  <%2= page.search.profiles.direct.name %2> (Direct match)
+                  <%2= page.search.profiles.direct.name %2>
                 </a>
               <%2 } -%2>
 
@@ -38,7 +38,7 @@
                     <%2 const profile = page.search.profiles.indirect[i]; -%2>
                     <a href="<%0- global.url.base %0>/account/<%2= profile.id %2>">
                       <img class="img-fluid" src="https://api.sprax2013.de/mc/skin/<%2= profile.id %2>/head?size=24">
-                      <%2= profile.name %2>&nbsp;(Indirect match)
+                      <%2= profile.name %2>&nbsp;<%2 if (profile.name != profile.matched_name) { -%2>(once known as <%2= profile.matched_name %2>) <%2 } -%2>
                     </a>
 
                     <%2 if (i+1 < page.search.profiles.indirect.length) { -%2>
