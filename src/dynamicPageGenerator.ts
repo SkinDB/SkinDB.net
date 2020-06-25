@@ -2,7 +2,7 @@ import path = require('path');
 import ejs = require('ejs');
 
 import { readFileSync } from 'fs';
-import { SkinDBAccount, SkinDBSkin, SkinDBSearch, SkinDBIndex } from './global';
+import { SkinDBAccount, SkinDBSkin, SkinDBSearch, SkinDBIndex, SkinDBSkins } from './global';
 import { Request } from 'express';
 
 const dynamicWebPath = path.join(__dirname, '..', 'resources', 'web', 'dynamic');
@@ -31,6 +31,7 @@ export const PageParts: { [key: string]: string } = {
   INDEX: ejs.render(readFileSync(path.join(dynamicWebPath, 'index.html'), 'utf-8'), { global, _HEAD, _HEADER, _SEARCH, _FOOTER }, ejsSettings.LVL_ZERO) as string,
   ACCOUNT: ejs.render(readFileSync(path.join(dynamicWebPath, 'account.html'), 'utf-8'), { global, _HEAD, _HEADER, _SEARCH, _FOOTER }, ejsSettings.LVL_ZERO) as string,
   SKIN: ejs.render(readFileSync(path.join(dynamicWebPath, 'skin.html'), 'utf-8'), { global, _HEAD, _HEADER, _SEARCH, _FOOTER }, ejsSettings.LVL_ZERO) as string,
+  SKINS: ejs.render(readFileSync(path.join(dynamicWebPath, 'skins.html'), 'utf-8'), { global, _HEAD, _HEADER, _SEARCH, _FOOTER }, ejsSettings.LVL_ZERO) as string,
   CAPE: ejs.render(readFileSync(path.join(dynamicWebPath, 'cape.html'), 'utf-8'), { global, _HEAD, _HEADER, _SEARCH, _FOOTER }, ejsSettings.LVL_ZERO) as string,
   HISTORY: ejs.render(readFileSync(path.join(dynamicWebPath, 'history.html'), 'utf-8'), { global, _HEAD, _HEADER, _SEARCH, _FOOTER }, ejsSettings.LVL_ZERO) as string,
   SEARCH: ejs.render(readFileSync(path.join(dynamicWebPath, 'search.html'), 'utf-8'), { global, _HEAD, _HEADER, _SEARCH, _FOOTER }, ejsSettings.LVL_ZERO) as string
@@ -39,6 +40,7 @@ export const PageParts: { [key: string]: string } = {
 interface PageData {
   account?: SkinDBAccount,
   skin?: SkinDBSkin,
+  skins?: SkinDBSkins,
   search?: SkinDBSearch,
   index?: SkinDBIndex
 };

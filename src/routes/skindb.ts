@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { restful, ErrorBuilder, isNumber } from '../utils';
 import { PageParts, render, global } from '../dynamicPageGenerator';
-import { getAccount, getSkin, getSearch, getTopThisWeek } from '../apiUtils';
+import { getAccount, getSkin, getSearch, getTopThisWeek, getSkins } from '../apiUtils';
 import { cfg } from '..';
 import request from 'request';
 
@@ -50,6 +50,23 @@ router.all('/skin/:skinID?', (req, res, next) => {
       getSkin(req.params.skinID)
         .then((skin) => {
           const result = render(PageParts.SKIN, req, { skin });
+
+          res.type('html')
+            .send(result);
+        })
+        .catch(next);
+    }
+  });
+});
+
+router.all('/skins', (req, res, next) => {
+  const page = (req.query.page as string) || 1;
+
+  restful(req, res, {
+    get: () => {
+      getSkins(page)
+        .then((skins) => {
+          const result = render(PageParts.SKINS, req, { skins });
 
           res.type('html')
             .send(result);

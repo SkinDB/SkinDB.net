@@ -1,5 +1,5 @@
 import { cfg } from '.';
-import { SkinDBAccount, SkinDBSkin, SkinDBSearch, SkinDBIndex } from './global';
+import { SkinDBAccount, SkinDBSkin, SkinDBSearch, SkinDBIndex, SkinDBSkins } from './global';
 import request from 'request';
 
 const baseURL = cfg.spraxAPI.useUnixSocket ? `http://unix:${cfg.spraxAPI.unixSocketAbsolutePath}:` : 'https://api.sprax2013.de';
@@ -14,6 +14,10 @@ export async function getAccount(uuid: string): Promise<SkinDBAccount> {
 
 export async function getSkin(skinID: string): Promise<SkinDBSkin> {
   return getFromAPI(`skin/${encodeURIComponent(skinID)}`) as Promise<SkinDBSkin>;
+}
+
+export async function getSkins(page: number | string): Promise<SkinDBSkins> {
+  return getFromAPI(`skins?page=${encodeURIComponent(page)}`) as Promise<SkinDBSkins>;
 }
 
 export async function getSearch(query: string, page: number | string): Promise<SkinDBSearch> {
