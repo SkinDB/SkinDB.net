@@ -49,16 +49,17 @@
 <meta property="og:url" content="<%2- con.url %2>">
 
 <%2 if(page.search) { %2>
+  <%2 const currPage = page.search.skins.page; %2>
   <%2 const prevPage = currPage > 1 ? currPage - 1 : -1; -%2>
   <%2 const nextPage = page.search.skins.hasNextPage ? currPage + 1 : -1; -%2>
   <%2 const pageinatorUrlPrefix = `<%0= global.url.base %0>/search?q=${con.query.q || ''}${con.query.filter ? `&filter=${con.query.filter}` : ''}`; -%2>
 
   <%2 if(prevPage != -1) { %2>
-    <link rel="prev" href="<%2- ${pageinatorUrlPrefix}&page=${prevPage} -%2>">
+    <link rel="prev" href="<%2- `${pageinatorUrlPrefix}&page=${prevPage}` -%2>">
   <%2 } %2>
 
   <%2 if(nextPage != -1) { %2>
-    <link rel="next" href="<%2- ${pageinatorUrlPrefix}&page=${nextPage} -%2>">
+    <link rel="next" href="<%2- `${pageinatorUrlPrefix}&page=${nextPage}` -%2>">
   <%2 } %2>
 <%2 } %2>
 
