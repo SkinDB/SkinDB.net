@@ -33,6 +33,9 @@
                   <img class="img-fluid mx-auto d-block"
                     src="https://api.sprax2013.de/mc/skin/x-url/body?size=100&url=https://cdn.skindb.net/skins/<%2- skin.id %2>">
 
+                  <hr>  <!-- TODO: remove debug -->
+                  <img class="img-fluid mx-auto d-block" src="https://cdn.skindb.net/skins/<%2= skin.id %2>">  <!-- TODO: remove debug -->
+
                   <hr>
 
                   <ul class="list-inline text-center">
@@ -216,9 +219,7 @@
         </div>
       <%2 } else { -%2>
         <p>
-          <b>Es wurden keine Skins zur Suchanfrage gefunden!</b>
-          <br>
-          <i>Versuchen Sie es vielleicht mit ähnlichen oder wenigern Begriffen.</i>
+          <b>Es wurden keine Skins gefunden!</b>
         </p>
       <%2 } -%2>
     </div>

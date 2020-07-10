@@ -320,14 +320,3 @@ export function toInt(input: string | number | boolean): number | null {
 
   return null;
 }
-
-/**
- * Defaults to 'sha256' algorithm
- */
-export function generateHash(data: Buffer | string, algorithm: string = 'sha256', options?: crypto.HashOptions): string {
-  if (!(data instanceof Buffer)) {
-    data = Buffer.from(data);
-  }
-
-  return crypto.createHash(algorithm, options).update(data).digest('hex');
-}
