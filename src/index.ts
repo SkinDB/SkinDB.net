@@ -24,7 +24,12 @@ export let cfg: SpraxAPIcfg = {
     discordErrorWebHookURL: null
   },
   web: {
-    serveStatic: false
+    serveStatic: false,
+    urlPrefix: {
+      https: false,
+      dynamicContentHost: 'auto',
+      staticContentHost: 'auto'
+    }
   },
   spraxAPI: {
     useUnixSocket: false,

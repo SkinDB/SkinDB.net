@@ -4,14 +4,29 @@ import ejs = require('ejs');
 import { readFileSync } from 'fs';
 import { SkinDBAccount, SkinDBSkin, SkinDBSearch, SkinDBIndex, SkinDBSkins } from './global';
 import { Request } from 'express';
+import { cfg } from '.';
 
 const dynamicWebPath = path.join(__dirname, '..', 'resources', 'web', 'dynamic');
 
-// Put into config
+/**
+ * Takes `host` and applies the choosen protocol from `cfg.web.urlPrefix.https`
+ *
+ * If the host is set to `auto`, host and port from `cfg.listen` are taken and used instead.
+ * The port is automatically emitted when it is the default port for the choosen protocol
+ *
+ * @param host Should be `auto` or a hostname with optional port (`host[:port]`)
+ */
+function generateUrlPrefix(host: string | 'auto') {
+  return `http${cfg.web.urlPrefix.https ? 's' : ''}://${
+    host != 'auto' ? host : `${cfg.listen.host}${
+      ((cfg.web.urlPrefix.https && cfg.listen.port != 443) ||
+        (!cfg.web.urlPrefix.https && cfg.listen.port != 80)) ? `:${cfg.listen.port}` : ''}`}`;
+}
+
 export const global = {
   url: {
-    base: 'http://localhost:8091',
-    static: 'http://localhost:8091'
+    base: generateUrlPrefix(cfg.web.urlPrefix.dynamicContentHost),
+    static: generateUrlPrefix(cfg.web.urlPrefix.staticContentHost)
   }
 };
 

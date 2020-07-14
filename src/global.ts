@@ -19,6 +19,11 @@ export interface SpraxAPIcfg {
 
   readonly web: {
     readonly serveStatic: boolean;
+    readonly urlPrefix: {
+      readonly https: boolean;
+      readonly dynamicContentHost: string | 'auto';
+      readonly staticContentHost: string | 'auto';
+    }
   }
 
   readonly spraxAPI: {
