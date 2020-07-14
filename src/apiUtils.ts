@@ -31,14 +31,15 @@ async function getFromAPI(urlSuffix: string, body?: object): Promise<object> {
       jar: true, gzip: true,
       headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined
     },
-      (err, _httpRes, body) => {
+      (err, httpRes, body) => {
         if (err) return reject(err);
 
-        // TODO: Handle non 200-status
+        const resBody = JSON.parse(body);
+        console.log(resBody); // TODO: remove debug
 
-        console.log(JSON.parse(body));
+        if (resBody.error && httpRes.statusCode != 200) return reject(resBody);
 
-        resolve(JSON.parse(body));
+        return resolve(resBody);
       });
   });
 }
