@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { restful, ErrorBuilder, isNumber } from '../utils';
 import { PageParts, render, global } from '../dynamicPageGenerator';
-import { getAccount, getSkin, getSearch, getTopThisWeek, getSkins } from '../apiUtils';
+import { getAccount, getSkin, getSearch, getTopThisWeek, getSkins, setTagVote } from '../apiUtils';
 import { cfg } from '..';
 import request from 'request';
 
@@ -41,13 +41,40 @@ router.all('/account/:uuid?', (req, res, next) => {
   });
 });
 
+router.all('/skin/:skinID/vote', (req, res, next) => {
+  if (!req.params.skinID) return next(new ErrorBuilder().notFound());
+  if (!isNumber(req.params.skinID)) return next(new ErrorBuilder().notFound());
+
+  restful(req, res, {
+    post: () => {
+      if (!req.session || !req.session.data) return res.status(401).send('You are not logged in');
+
+      let tag = ((req.body.tag || '') as string).trim(),
+        vote: string | boolean = ((req.body.vote || '') as string).trim().toLowerCase();
+
+      if (tag.length == 0 || tag.includes('\n') || tag.includes('\r')) return next(new ErrorBuilder().invalidBody([{ param: 'tag', condition: 'Valid one-line string' }]));
+      if (vote != 'on' && vote != 'off' && vote != 'unset') return next(new ErrorBuilder().invalidBody([{ param: 'vote', condition: `'on', 'off' or 'unset'` }]));
+
+      if (vote != 'unset') {
+        vote = vote == 'on';
+      }
+
+      setTagVote(req.session.data.id, req.params.skinID, tag, vote)
+        .then(() => {
+          return res.redirect(303, `/skin/${req.params.skinID}`);
+        })
+        .catch(next);
+    }
+  });
+});
+
 router.all('/skin/:skinID?', (req, res, next) => {
   if (!req.params.skinID) return next(new ErrorBuilder().notFound());
   if (!isNumber(req.params.skinID)) return next(new ErrorBuilder().notFound());
 
   restful(req, res, {
     get: () => {
-      getSkin(req.params.skinID)
+      getSkin(req.params.skinID, req.session?.data ? req.session.data.id : null)
         .then((skin) => {
           const result = render(PageParts.SKIN, req, { skin });
 

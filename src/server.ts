@@ -51,7 +51,7 @@ app.use(expressSess({
     tableName: 'sessions',
     pruneSessionInterval: 60 * 60 * 24 /*24h*/
   }) : undefined,
-  secret: 'key*board catz',
+  secret: 'key*board catz', // TODO
   resave: false,
   unset: 'destroy',
   saveUninitialized: false,
@@ -71,6 +71,7 @@ app.use((_req, res, next) => {
 });
 
 /* Prepare Request */
+app.use(express.urlencoded({ extended: false }));
 // app.use(express.raw({ type: ['image/png'], limit: '3MB' }));  // recode to send custom error messages
 // app.use(express.json());
 

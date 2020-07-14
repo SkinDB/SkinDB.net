@@ -65,9 +65,79 @@
                 <%2 } -%2>
 
                 <%2 for (const tag of page.skin.aiTags) { -%2>
-                  <!-- TODO: onHover: Show report button so users can say they don't agree with this tag -->
-                  <a href="<%0- global.url.base %0>/search?q=<%2= tag.name %2>" class="btn button-tag a-stealth bg-lavenderblush"><%2= tag.name %2></a>
+                  <%0 // TODO: Reduce duplicate code! %0>
+                  <%2 const vote = page.skin.profileVotes ? page.skin.profileVotes.find((value) => value.id == tag.id) : undefined; %2>
+                  <%2 const btnClassUp = vote && vote.vote ? 'icon-green' : 'hover-green'; %2>
+                  <%2 const btnClassDown = vote && !vote.vote ? 'icon-red' : 'hover-red'; %2>
+                  <%2 const inputValueUp = vote && vote.vote ? 'unset' : 'on'; %2>
+                  <%2 const inputValueDown = vote && !vote.vote ? 'unset' : 'off'; %2>
+
+                  <%2 const sumClass = tag.sum == 0 ? '' : (tag.sum > 0 ? 'text-success' : 'text-danger'); %2>
+                  <%2 const sumStr = `<span class="${sumClass}"> ${tag.sum == 0 ? '±' : (tag.sum > 0 ? '+' : '')}${tag.sum}</span>`; %2>
+
+                  <a href="<%0- global.url.base %0>/search?q=<%2= tag.name %2>" class="btn button-tag a-stealth bg-lavenderblush">
+                    <%2= tag.name %2> <%2- sumStr %2>
+
+                    <div clas="row" style="float: right">
+                      <form method="POST" action="<%2= con.url %2>/vote" style="height: calc(1.5em + .5rem + 2px);margin: -8px;float: left"
+                        <%2 if(!con.isLoggedIn) { %2>data-toggle="tooltip" data-placement="top" title="You need to be logged in!"<%2 } %2>>
+                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>disabled<%2 } %2>><span class="material-icons <%2- btnClassUp %2>">thumb_up</span></button>
+
+                        <input type="text" name="tag" value="<%2= tag.name %2>" hidden readonly>
+                        <input type="checkbox" name="vote" value="<%2= inputValueUp %2>" checked hidden readonly>
+                      </form>
+
+                      <form method="POST" action="<%2= con.url %2>/vote" style="height: calc(1.5em + .5rem + 2px);margin: -8px;float: right"
+                        <%2 if(!con.isLoggedIn) { %2>data-toggle="tooltip" data-placement="top" title="You need to be logged in!"<%2 } %2>>
+                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>disabled<%2 } %2>><span class="material-icons <%2- btnClassDown %2>">thumb_down</span></button>
+
+                        <input type="text" name="tag" value="<%2= tag.name %2>" hidden readonly>
+                        <input type="checkbox" name="vote" value="<%2= inputValueDown %2>" checked hidden readonly>
+                      </form>
+                    </div>
+                  </a>
                 <%2 } -%2>
+
+                <%2 for (const tag of page.skin.tagVotes) { -%2>
+                  <%2 const vote = page.skin.profileVotes ? page.skin.profileVotes.find((value) => value.id == tag.id) : undefined; %2>
+                  <%2 const btnClassUp = vote && vote.vote ? 'icon-green' : 'hover-green'; %2>
+                  <%2 const btnClassDown = vote && !vote.vote ? 'icon-red' : 'hover-red'; %2>
+                  <%2 const inputValueUp = vote && vote.vote ? 'unset' : 'on'; %2>
+                  <%2 const inputValueDown = vote && !vote.vote ? 'unset' : 'off'; %2>
+
+                  <%2 const sumClass = tag.sum == 0 ? '' : (tag.sum > 0 ? 'text-success' : 'text-danger'); %2>
+                  <%2 const sumStr = `<span class="${sumClass}"> ${tag.sum == 0 ? '±' : (tag.sum > 0 ? '+' : '')}${tag.sum}</span>`; %2>
+
+                  <a href="<%0- global.url.base %0>/search?q=<%2= tag.name %2>" class="btn button-tag a-stealth bg-???">
+                    <%2= tag.name %2> <%2- sumStr %2>
+
+                    <div clas="row" style="float: right">
+                      <form method="POST" action="<%2= con.url %2>/vote" style="height: calc(1.5em + .5rem + 2px);margin: -8px;float: left"
+                        <%2 if(!con.isLoggedIn) { %2>data-toggle="tooltip" data-placement="top" title="You need to be logged in!"<%2 } %2>>
+                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>disabled<%2 } %2>><span class="material-icons <%2- btnClassUp %2>">thumb_up</span></button>
+
+                        <input type="text" name="tag" value="<%2= tag.name %2>" hidden readonly>
+                        <input type="checkbox" name="vote" value="<%2= inputValueUp %2>" checked hidden readonly>
+                      </form>
+
+                      <form method="POST" action="<%2= con.url %2>/vote" style="height: calc(1.5em + .5rem + 2px);margin: -8px;float: right"
+                        <%2 if(!con.isLoggedIn) { %2>data-toggle="tooltip" data-placement="top" title="You need to be logged in!"<%2 } %2>>
+                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>disabled<%2 } %2>><span class="material-icons <%2- btnClassDown %2>">thumb_down</span></button>
+
+                        <input type="text" name="tag" value="<%2= tag.name %2>" hidden readonly>
+                        <input type="checkbox" name="vote" value="<%2= inputValueDown %2>" checked hidden readonly>
+                      </form>
+                    </div>
+                  </a>
+                <%2 } -%2>
+
+                <div class="hover-box" <%2 if(!con.isLoggedIn) { %2>data-toggle="tooltip" data-placement="top" title="You need to be logged in!"<%2 } %2>>
+                  <form method="POST" action="<%2= con.url %2>/vote">
+                    <button type="submit" class="btn a-stealth text-center"><span class="material-icons">add</span></button><!--
+                    --><input type="text" name="tag" placeholder="Add new tag" required <%2 if(!con.isLoggedIn) { %2>hidden<%2 } %2>>
+                    <input type="checkbox" name="vote" value="on" checked hidden readonly>
+                  </form>
+                </div>
               </div>
             </div>
 
@@ -89,8 +159,9 @@
               <hr class="w-95">
 
               <!-- TODO: Make div scrollable and don't show all users by default -->
+              <!-- TODO: Show Profile-Card onHover -->
               <div class="card-content" style="max-height: 150px; overflow-y: auto">
-                <%2- page.skin.seen_on.map((el) => { return `<a href="<%0- global.url.base %0>/account/${el.id}">${el.name}</a>`; }).join(',\n                '); %2>
+                <%2- page.skin.seenOn.map((el) => { return `<a href="<%0- global.url.base %0>/account/${el.id}">${el.name}</a>`; }).join(',\n                '); %2>
               </div>
             </div>
           </div>
@@ -100,6 +171,13 @@
   </main>
 
   <%0- _FOOTER %0>
+  <%2 if(!con.isLoggedIn) { %2>
+    <script>
+      $(() => {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+  <%2 } %2>
 </body>
 
 </html>

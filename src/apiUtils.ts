@@ -12,8 +12,11 @@ export async function getAccount(uuid: string): Promise<SkinDBAccount> {
   return getFromAPI(`account/${encodeURIComponent(uuid)}`) as Promise<SkinDBAccount>;
 }
 
-export async function getSkin(skinID: string): Promise<SkinDBSkin> {
-  return getFromAPI(`skin/${encodeURIComponent(skinID)}`) as Promise<SkinDBSkin>;
+export async function getSkin(skinID: string, accountID?: string): Promise<SkinDBSkin> {
+  return getFromAPI(`skin/${encodeURIComponent(skinID)}?profile=${accountID || ''}`) as Promise<SkinDBSkin>;
+}
+export async function setTagVote(accountID: string, skinID: string, tag: string, vote: boolean | 'unset'): Promise<object> {
+  return getFromAPI(`skin/${encodeURIComponent(skinID)}/vote`, 'POST', { user: accountID, tag, vote });
 }
 
 export async function getSkins(page: number | string): Promise<SkinDBSkins> {
@@ -24,11 +27,11 @@ export async function getSearch(query: string, page: number | string): Promise<S
   return getFromAPI(`search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(page)}`) as Promise<SkinDBSearch>;
 }
 
-async function getFromAPI(urlSuffix: string, body?: object): Promise<object> {
+async function getFromAPI(urlSuffix: string, method: string = 'GET', body?: object | Buffer): Promise<object> {
   return new Promise((resolve, reject) => {
 
     request(`${baseURL}/skindb/frontend/${urlSuffix}`, {
-      jar: true, gzip: true,
+      method, jar: true,
       headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined
     },
       (err, httpRes, body) => {
