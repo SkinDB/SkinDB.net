@@ -26,7 +26,7 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.7"
   },
   "nodemonConfig": {
     "watch": [
