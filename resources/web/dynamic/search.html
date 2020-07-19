@@ -6,6 +6,7 @@
 
   <title>SkinDB.net — Searchable Minecraft skin database</title>
 </head>
+<%2 // const numberFormater = new Intl.NumberFormat('en', { maximumFractionDigits: 2 }); %2>
 
 <body class="d-flex flex-column h-100 <%2 if(con.isDarkTheme){ %2>dark-body text-light<%2 } %2>">
   <%0- _HEADER %0>
@@ -15,7 +16,6 @@
       <%0- _SEARCH %0>
       <br>
 
-      <!-- TODO: Ungefähr 218.000.000 Ergebnisse (0,50 Sekunden) -->
       <%2 if (page.search.profiles.direct || page.search.profiles.indirect.length > 0) { -%2>
         <div class="row">
           <div class="col">
@@ -55,6 +55,8 @@
           </div>
         </div>
       <%2 } -%2>
+
+      <!-- <p>About <%2= // numberFormater.format(page.search.skins.total) %2> results (<%2= // numberFormater.format(page.search.skins.time / 1000) %2> seconds)</p> -->
 
       <%2 if (page.search.skins.hits.length > 0) { -%2>
         <div class="row row-equal">

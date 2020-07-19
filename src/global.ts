@@ -113,6 +113,7 @@ export interface SkinDBSearch {
 
   readonly skins: {
     readonly hits: Skin[];
+    readonly time: number;
     readonly page: number;
     readonly hasNextPage: boolean;
   }
