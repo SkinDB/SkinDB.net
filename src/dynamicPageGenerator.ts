@@ -64,12 +64,13 @@ interface PageData {
 export function render(html: string, req: Request, pageData: PageData = {}): string {
   const currURL = global.url.base + (req.originalUrl.indexOf('?') >= 0 ? req.originalUrl.substring(0, req.originalUrl.indexOf('?')) : req.originalUrl);
 
-  const data: { page: PageData, con: { query: { [key: string]: string }, isDarkTheme: boolean, isLoggedIn: boolean, session: object, url: string, urlEncoded: string } } = {
+  const data: { page: PageData, con: { query: { [key: string]: string }, isDarkTheme: boolean, isLoggedIn: boolean, isAdmin: boolean, session: object, url: string, urlEncoded: string } } = {
     page: pageData,
     con: {
       query: {},
       isDarkTheme: true,
       isLoggedIn: req.session && req.session.data,
+      isAdmin: req.session && req.session.data && req.session.data.id == '407b28ede7bd451693d93361fecb7889',
       session: req.session ? req.session.data : null,
       url: currURL,
       urlEncoded: encodeURIComponent(currURL),
