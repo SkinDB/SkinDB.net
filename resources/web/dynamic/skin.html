@@ -3,8 +3,6 @@
 
 <head>
   <%0- _HEAD %0>
-
-  <title>SkinDB.net — Searchable Minecraft skin database</title>
 </head>
 
 <body class="d-flex flex-column h-100 <%2 if(con.isDarkTheme){ %2>dark-body text-light<%2 } %2>">
@@ -53,7 +51,7 @@
               <hr class="w-95">
 
               <div class="card-content">
-                <%2 if(page.skin.tags.length == 0 && page.skin.aiTags.length == 0) { -%2>
+                <%2 if(page.skin.tags.length == 0 && page.skin.aiTags.length == 0 && page.skin.tagVotes.length == 0) { -%2>
                   <p><i>No tags have been added to this skin yet.</i></p>
                 <%2 } -%2>
 

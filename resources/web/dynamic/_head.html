@@ -35,15 +35,60 @@
   <meta property="og:title" content="View <%2- page.account.user.name %2>'s Minecraft Profile">
   <meta property="og:description" content="View the history of Usernames, Skins, Capes and much more for <%2- page.account.user.name %2> and others!">
   <meta property="og:image" content="https://api.sprax2013.de/mc/skin/x-url/head/3d?size=512&url=https://cdn.skindb.net/skins/<%2- page.account.skinHistory.lastTen[0] %2>">
+  <meta property="og:image:width" content="555">
+  <meta property="og:image:height" content="512">
 
   <meta name="description" content="View the history of Usernames, Skins, Capes and much more for <%2- page.account.user.name %2> and others!">
   <title><%2- page.account.user.name %2>'s Profile | SkinDB.net</title>
+<%2 } else if(page.skin) { %2>
+  <%2 const featuredTags = []; %2>
+  <%2 for (let i = 0; i < 4; i++) { %2>
+    <%2 if (featuredTags.length >= 4) break; %2>
+    <%2 if (i >= page.skin.tags.length) break; %2>
+
+    <%2 featuredTags.push(page.skin.tags[i].name); %2>
+  <%2 } %2>
+  <%2 for (let i = 0; i < 4; i++) { %2>
+    <%2 if (featuredTags.length >= 4) break; %2>
+    <%2 if (i >= page.skin.aiTags.length) break; %2>
+
+    <%2 featuredTags.push(page.skin.aiTags[i].name); %2>
+  <%2 } %2>
+  <%2 for (let i = 0; i < page.skin.tagVotes.length; i++) { %2>
+    <%2 if (featuredTags.length >= 4) break; %2>
+    <%2 if (page.skin.tagVotes[i].sum <= 0) break; %2>
+
+    <%2 featuredTags.push(page.skin.tagVotes[i].name); %2>
+  <%2 } %2>
+
+  <%2 if(featuredTags.length >= 4) { %2>
+    <%2 featuredTags.pop(); %2>
+    <%2 featuredTags.push('...'); %2>
+  <%2 } %2>
+
+  <%2 const descSuffix = page.skin.seenOn.length > 0 ? page.skin.seenOn.length >= 5 ? ` has been used by more than ${page.skin.seenOn.length} people!` : ` has been used by at least ${page.skin.seenOn.length} ${page.skin.seenOn.length == 1 ? 'person' : 'people'}!` : ''; %2>
+  <%2 const descFull = descSuffix ? `This skin${featuredTags.length > 0 ? ` (${featuredTags.join(', ')})` : ''}${descSuffix}` : 'View the history of Usernames, Skins, Capes and much more!'; %2>
+
+  <meta property="og:type" content="website">
+
+  <meta property="og:title" content="View a Minecraft skin on SkinDB.net">
+  <meta property="og:description" content="<%2= descFull %2>">
+  <meta property="og:image" content="https://api.sprax2013.de/mc/skin/x-url/body/3d?size=512&url=https://cdn.skindb.net/skins/<%2- page.skin.skin.id %2>">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="936">
+
+  <meta name="description" content="<%2= descFull %2>">
+  <title>Skin #<%2= page.skin.skin.id %2> | SkinDB.net</title>
 <%2 } else { %2>
   <meta property="og:type" content="website">
 
   <meta property="og:title" content="SkinDB.net — Searchable Minecraft skin database">
   <meta property="og:description" content="Easily search for your next Minecraft Skin or Cape - You can search for specific Usernames too!">
   <meta property="og:image" content="<%0- global.url.static %0>/img/Logo_HD.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+
+  <meta name="description" content="View the history of Usernames, Skins, Capes and much more!">
 <%2 } %2>
 <meta property="og:site_name" content="SkinDB.net">
 <meta property="og:url" content="<%2- con.url %2>">
