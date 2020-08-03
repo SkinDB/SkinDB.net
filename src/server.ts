@@ -51,7 +51,7 @@ app.use(expressSess({
     tableName: 'sessions',
     pruneSessionInterval: 60 * 60 * 24 /*24h*/
   }) : undefined,
-  secret: 'key*board catz', // TODO
+  secret: cfg.sessionSecret,
   resave: false,
   unset: 'destroy',
   saveUninitialized: false,

@@ -38,7 +38,8 @@ export let cfg: SpraxAPIcfg = {
   mcAuth: {
     clientID: '',
     clientSecret: ''
-  }
+  },
+  sessionSecret: require('crypto').randomBytes(1024).toString('base64')
 };
 export let dbCfg: SpraxAPIdbCfg = {
   enabled: false,

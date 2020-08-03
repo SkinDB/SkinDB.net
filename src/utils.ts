@@ -1,4 +1,3 @@
-import crypto = require('crypto');
 import request = require('request');
 
 import { EOL } from 'os';
