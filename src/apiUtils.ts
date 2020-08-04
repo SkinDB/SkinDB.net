@@ -27,18 +27,26 @@ export async function getSearch(query: string, page: number | string): Promise<S
   return getFromAPI(`search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(page)}`) as Promise<SkinDBSearch>;
 }
 
-async function getFromAPI(urlSuffix: string, method: string = 'GET', body?: object | Buffer): Promise<object> {
-  return new Promise((resolve, reject) => {
+export async function getSearchForFile(file: Buffer, page: number | string): Promise<SkinDBSearch> {
+  return getFromAPI(`search?page=${encodeURIComponent(page)}`, undefined, file) as Promise<SkinDBSearch>;
+}
 
+async function getFromAPI(urlSuffix: string, method: string = 'GET', body?: object | Buffer, contentType: string = 'application/json'): Promise<object> {
+  let end: number;
+  const start = Date.now();
+
+  return new Promise((resolve, reject) => {
     request(`${baseURL}/skindb/frontend/${urlSuffix}`, {
       method, jar: true,
-      headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined
+      headers: body ? { 'Content-Type': contentType } : undefined, body: body ? (Buffer.isBuffer(body) ? body : JSON.stringify(body)) : undefined
     },
       (err, httpRes, body) => {
         if (err) return reject(err);
 
         const resBody = JSON.parse(body);
-        console.log(resBody); // TODO: remove debug
+
+        end = Date.now();
+        console.log(resBody, `(took ${end - start}ms)`); // TODO: remove debug
 
         if (resBody.error && httpRes.statusCode != 200) return reject(resBody);
 

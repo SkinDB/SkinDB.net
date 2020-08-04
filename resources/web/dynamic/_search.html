@@ -5,3 +5,9 @@
     <i class="material-icons search-clear d-none" onclick="clearValue('search')">close</i>
   </div>
 </form>
+
+<form class="search-form" onsubmit="event.preventDefault()" action="<%0- global.url.base %0>/search" method="POST">
+  <div class="input-group">
+    <input type="file" name="img" oninput="test(this)" class="form-control-file no-border fullWinput" id="imgSearch">
+  </div>
+</form>

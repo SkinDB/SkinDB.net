@@ -125,7 +125,6 @@ router.all('/search', (req, res, next) => {
   restful(req, res, {
     get: () => {
       if (!req.query.q) return next(new ErrorBuilder().invalidParams('query', [{ param: 'q', condition: 'Valid string' }]));
-
       const page = (req.query.page as string) || 1;
 
       getSearch(req.query.q as string, page)
