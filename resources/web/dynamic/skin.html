@@ -16,7 +16,11 @@
       <div class="row row-equal">
         <div class="col-md-3">
           <div class="card-skin text-dark text-center">
-            <img class="img-fluid mx-auto d-block" alt="3D rendered Minecraft skin"
+            <button type="button" class="btn btn-outline-success btn-sm" style="margin-right: .5rem;" onclick="toggle3d(this)">3D</button><!--
+            --><button type="button" class="btn btn-outline-success btn-sm" onclick="toggle2nd(this)">2nd</button>
+            <br><br>
+
+            <img class="img-fluid mx-auto d-block" id="skin3D" alt="Rendered Minecraft skin"
               src="https://api.sprax2013.de/mc/skin/x-url/body/3d?size=180&url=https://cdn.skindb.net/skins/<%2= page.skin.skin.id %2>">
 
             <hr>  <!-- TODO: remove debug -->
@@ -169,13 +173,17 @@
   </main>
 
   <%0- _FOOTER %0>
-  <%2 if(!con.isLoggedIn) { %2>
-    <script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      update3dSkin('<%2= page.skin.skin.id %2>');
+
+      // <%2 if(!con.isLoggedIn) { %2>
       $(() => {
         $('[data-toggle="tooltip"]').tooltip();
       });
-    </script>
-  <%2 } %2>
+      // <%2 } %2>
+    });
+  </script>
 </body>
 
 </html>
