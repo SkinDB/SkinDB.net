@@ -33,13 +33,17 @@ export class dbUtils {
     return this.pool != null;
   }
 
-  isReady(callback: (err: Error | null) => void): void {
-    if (this.pool == null) return callback(null);
+  async isReady(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.pool == null) return reject();
 
-    this.pool.query('SELECT NOW();', (err, _res) => callback(err));
+      this.pool.query('SELECT NOW();')
+        .then(() => resolve())
+        .catch((err) => reject(err));
+    });
   }
 
-  shutdown(): Promise<void> {
+  async shutdown(): Promise<void> {
     if (this.pool == null) return new Promise((resolve, _reject) => { resolve(); });
 
     const result = this.pool.end();

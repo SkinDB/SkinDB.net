@@ -112,12 +112,15 @@ export const webAccessLogStream = rfs.createStream('access.log', { interval: '1d
   errorLogStream = rfs.createStream('error.log', { interval: '1d', maxFiles: 90, path: path.join(process.cwd(), 'logs', 'error') });
 
 /* Start webserver (and test database connection) */
-db.isReady((err) => {
-  if (err) {
-    console.error(`Database is not ready! (${err.message})`);
-    process.exit(2);
+(async () => {
+  if (dbCfg.enabled) {
+    try {
+      await db.isReady();
+    } catch (err) {
+      console.error(`Database is not ready! (${err.message})`);
+      process.exit(2);
+    }
   }
-
   server = createServer(require('./server').app);
 
   server.on('error', (err: { syscall: string, code: string }) => {
@@ -179,4 +182,4 @@ db.isReady((err) => {
   } else {
     server.listen(cfg.listen.port, cfg.listen.host);
   }
-});
+})();
