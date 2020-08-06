@@ -83,7 +83,7 @@
                     <div clas="row" style="float: right">
                       <form method="POST" action="<%2= con.url %2>/vote" style="height: calc(1.5em + .5rem + 2px);margin: -8px;float: left"
                         <%2 if(!con.isLoggedIn) { %2>data-toggle="tooltip" data-placement="top" title="You need to be logged in!"<%2 } %2>>
-                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>disabled<%2 } %2>><span class="material-icons <%2- btnClassUp %2>">thumb_up</span></button>
+                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>onclick="event.preventDefault()"<%2 } %2>><span class="material-icons <%2- btnClassUp %2>">thumb_up</span></button>
 
                         <input type="text" name="tag" value="<%2= tag.name %2>" hidden readonly>
                         <input type="checkbox" name="vote" value="<%2= inputValueUp %2>" checked hidden readonly>
@@ -91,7 +91,7 @@
 
                       <form method="POST" action="<%2= con.url %2>/vote" style="height: calc(1.5em + .5rem + 2px);margin: -8px;float: right"
                         <%2 if(!con.isLoggedIn) { %2>data-toggle="tooltip" data-placement="top" title="You need to be logged in!"<%2 } %2>>
-                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>disabled<%2 } %2>><span class="material-icons <%2- btnClassDown %2>">thumb_down</span></button>
+                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>onclick="event.preventDefault()"<%2 } %2>><span class="material-icons <%2- btnClassDown %2>">thumb_down</span></button>
 
                         <input type="text" name="tag" value="<%2= tag.name %2>" hidden readonly>
                         <input type="checkbox" name="vote" value="<%2= inputValueDown %2>" checked hidden readonly>
@@ -116,7 +116,7 @@
                     <div clas="row" style="float: right">
                       <form method="POST" action="<%2= con.url %2>/vote" style="height: calc(1.5em + .5rem + 2px);margin: -8px;float: left"
                         <%2 if(!con.isLoggedIn) { %2>data-toggle="tooltip" data-placement="top" title="You need to be logged in!"<%2 } %2>>
-                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>disabled<%2 } %2>><span class="material-icons <%2- btnClassUp %2>">thumb_up</span></button>
+                        <button type="submit" class="btn a-stealth text-center"<%2 if(!con.isLoggedIn) { %2>onclick="event.preventDefault()"<%2 } %2>><span class="material-icons <%2- btnClassUp %2>">thumb_up</span></button>
 
                         <input type="text" name="tag" value="<%2= tag.name %2>" hidden readonly>
                         <input type="checkbox" name="vote" value="<%2= inputValueUp %2>" checked hidden readonly>
@@ -124,7 +124,7 @@
 
                       <form method="POST" action="<%2= con.url %2>/vote" style="height: calc(1.5em + .5rem + 2px);margin: -8px;float: right"
                         <%2 if(!con.isLoggedIn) { %2>data-toggle="tooltip" data-placement="top" title="You need to be logged in!"<%2 } %2>>
-                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>disabled<%2 } %2>><span class="material-icons <%2- btnClassDown %2>">thumb_down</span></button>
+                        <button type="submit" class="btn a-stealth text-center" <%2 if(!con.isLoggedIn) { %2>onclick="event.preventDefault()"<%2 } %2>><span class="material-icons <%2- btnClassDown %2>">thumb_down</span></button>
 
                         <input type="text" name="tag" value="<%2= tag.name %2>" hidden readonly>
                         <input type="checkbox" name="vote" value="<%2= inputValueDown %2>" checked hidden readonly>
