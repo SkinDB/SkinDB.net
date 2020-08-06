@@ -1,13 +1,55 @@
-<form class="search-form" action="<%0- global.url.base %0>/search" method="GET">
-  <div class="input-group">
-    <input type="search" class="form-control no-border fullWinput" placeholder="Search..." name="q" id="search"
-      maxlength="128" oninput="onSearchInput(event)" value="<%2= con.query.q %2>" required>
-    <i class="material-icons search-clear d-none" onclick="clearValue('search')">close</i>
-  </div>
-</form>
+<div id="searchUpload" ondrop="dropHandler(event);" ondragover="event.preventDefault()">
+  <form class="search-form" action="<%0- global.url.base %0>/search" method="GET">
+    <div class="input-group">
+      <input type="search" class="form-control no-border fullWinput" placeholder="Search..." name="q" id="search"
+        maxlength="128" oninput="onSearchInput(event)" value="<%2= con.query.q %2>" required>
+      <i class="material-icons search-clear d-none" onclick="clearValue('search')">close</i>
+    </div>
+  </form>
+</div>
 
-<form class="search-form" onsubmit="event.preventDefault()" action="<%0- global.url.base %0>/search" method="POST">
-  <div class="input-group">
-    <input type="file" name="img" oninput="test(this)" class="form-control-file no-border fullWinput" id="imgSearch">
-  </div>
-</form>
+<script>
+  async function dropHandler(e) {
+    // This feature is not ready for release yet,
+    // but it makes things easier for me ^^
+    // Please keep in mind that it may be changed, removed or bugged
+    e.preventDefault();
+
+    if (e.dataTransfer.items) {
+      for (let i = 0; i < e.dataTransfer.items.length; i++) {
+        const item = e.dataTransfer.items[i];
+
+        // Check if supported file
+        if (item.kind == 'file' && item.type == 'image/png') {
+          const file = item.getAsFile();
+
+          // read file
+          const fileBuffer = await file.arrayBuffer();
+          console.log(`Uploading file '${file.name} (${file.size} bytes)...'`);
+
+          const html = await searchByImage(fileBuffer, file.type);
+          // window.history.pushState(null, '', '<%0- global.url.base %0>/search');
+
+          // Write new HTML (need a better way to search by file [form file upload?])
+          const newDoc = document.open('text/html', 'replace');
+          newDoc.write(html);
+          newDoc.close();
+
+          break;
+        }
+      }
+    } else {
+      console.error('Your browser does not support this temporary implementation of Drag\'n Drop...');
+    }
+  }
+
+  async function searchByImage(fileBuffer, fileType) {
+    const response = await fetch('<%0- global.url.base %0>/search', {
+      method: 'POST',
+      headers: { 'Content-Type': fileType },
+      body: fileBuffer
+    });
+
+    return response.text();
+  }
+</script>

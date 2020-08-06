@@ -98,7 +98,7 @@ app.use((_req, res, next) => {
 
 /* Prepare Request */
 app.use(express.urlencoded({ extended: false }));
-// app.use(express.raw({ type: ['image/png'], limit: '3MB' }));  // recode to send custom error messages
+app.use(express.raw({ type: ['image/png'], limit: '3MB' }));  // recode to send custom error messages
 // app.use(express.json());
 
 /* Webserver routes */

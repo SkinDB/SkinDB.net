@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { restful, ErrorBuilder, isNumber } from '../utils';
 import { PageParts, render, global } from '../dynamicPageGenerator';
-import { getAccount, getSkin, getSearch, getTopThisWeek, getSkins, setTagVote } from '../apiUtils';
+import { getAccount, getSkin, getSearch, getTopThisWeek, getSkins, setTagVote, getSearchForFile } from '../apiUtils';
 import { cfg } from '..';
 import request from 'request';
 
@@ -133,6 +133,15 @@ router.all('/search', (req, res, next) => {
             .send(render(PageParts.SEARCH, req, { search: searchRes }));
         })
         .catch(next);
+    },
+    post: () => {
+      if (req.header('Content-Type')?.toLowerCase() != 'image/png') return next(new ErrorBuilder().invalidBody([{ param: 'body', condition: 'Valid PNG' }]));
+
+      getSearchForFile(req.body, 1)
+        .then((searchRes) => {
+          res.type('html')
+            .send(render(PageParts.SEARCH, req, { search: searchRes }));
+        }).catch(next);
     }
   });
 });

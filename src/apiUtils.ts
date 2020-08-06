@@ -28,7 +28,7 @@ export async function getSearch(query: string, page: number | string): Promise<S
 }
 
 export async function getSearchForFile(file: Buffer, page: number | string): Promise<SkinDBSearch> {
-  return getFromAPI(`search?page=${encodeURIComponent(page)}`, undefined, file) as Promise<SkinDBSearch>;
+  return getFromAPI(`search?page=${encodeURIComponent(page)}`, undefined, file, 'image/png') as Promise<SkinDBSearch>;
 }
 
 async function getFromAPI(urlSuffix: string, method: string = 'GET', body?: object | Buffer, contentType: string = 'application/json'): Promise<object> {
