@@ -4,6 +4,7 @@ import { PageParts, render, global } from '../dynamicPageGenerator';
 import { getAccount, getSkin, getSearch, getTopThisWeek, getSkins, setTagVote, getSearchForFile } from '../apiUtils';
 import { cfg } from '..';
 import request from 'request';
+import { post as httpPost } from 'superagent';
 
 /* Routes */
 const router = Router();
@@ -162,45 +163,52 @@ router.all('/login', (req, res, next) => {
           return res.send(`Login failed!\nerror: ${req.query.error}\nerror-description: ${req.query.error_description}`); //TODO
         }
 
-        request('https://mc-auth.com/oauth2/token', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            code: req.query.code,
+        httpPost('https://Mc-Auth.com/oAuth2/token')
+          .set('Accept', 'application/json')
+          .set('Content-Type', 'application/json')
+          // .set('User-Agent', '') // TODO
+          .send({
+            // client_secret from Mc-Auth to authenticate our request
             client_id: cfg.mcAuth.clientID,
             client_secret: cfg.mcAuth.clientSecret,
-            redirect_uri: `${global.url.base}/login${req.query.returnTo ? `?returnTo=${req.query.returnTo}` : ''}`,
-            grant_type: 'authorization_code'
+
+            code: req.query.code,             // The code that Mc-Auth told the user to give us (redirect)
+            redirect_uri: `${global.url.base}/login${req.query.returnTo ? `?returnTo=${req.query.returnTo}` : ''}`,        // The same URL we redirected the user to
+            grant_type: 'authorization_code'  // REQUIRED. See oAuth2 specs
           })
-        }, (err, httpRes, body) => {
-          if (err) return next(err);
+          .end((err, httpBody) => {
+            console.log(httpBody.body);
+            if (err) return next(err);  // An error occurred
+            if (!httpBody.body.access_token || !req.session) return next(new Error('ApiError.create(ApiErrs.INTERNAL_SERVER_ERROR)')); // Should not be possible but just in case
 
-          body = JSON.parse(body);
-
-          if (httpRes.statusCode == 200 && body.data && body.data.profile) {
-            if (!req.session) return res.send('Login failed!'); // TODO
+            // Authentication was successful!!
 
             // TODO: Update mc inside session periodically
             // TODO: Render mc-skin or logged in user (header) by URL instead of UUID
-            req.session.data = { id: body.data.profile.id, mc: body.data.profile };
+            req.session.data = { id: httpBody.body.data.profile.id, mc: httpBody.body.data.profile };
 
 
             // Successful
             req.session.save((err) => {
-              if (err) return res.send('Login failed!');  // TODO
+              if (err) return next(err);
 
               const returnTo = (req.query.returnTo as string || '').toLowerCase();
 
               return res.redirect(returnTo.startsWith(global.url.base) ? req.query.returnTo as string : global.url.base);
             });
-          } else {
-            // TODO: Show HTML
-            return res.send('Login failed!');
-          }
-        });
+          });
       } else {
+        const authReqURL =
+          'https://Mc-Auth.com/oAuth2/authorize' +
+          '?client_id=' + // Your client_id from https://mc-auth.com/de/settings/apps
+          cfg.mcAuth.clientID +
+          '&redirect_uri=' + // Where should Mc-Auth.com redirect the client to (needs to be whitelisted inside your app settings)
+          encodeURIComponent(`${global.url.base}/login${req.query.returnTo ? `?returnTo=${req.query.returnTo}` : ''}`) +
+          '&scope=profile' + // Optional. Tells Mc-Auth that we want the public profile (so we don't have to contact Mojang ourself)
+          '&response_type=code'; // 'token' is supported too
+
         // Redirect client to Mc-Auth.com
-        return res.redirect(`https://mc-auth.com/oauth2/authorize?response_type=code&client_id=${cfg.mcAuth.clientID}&scope=profile&redirect_uri=${encodeURIComponent(`${global.url.base}/login${req.query.returnTo ? `?returnTo=${req.query.returnTo}` : ''}`)}`);
+        return res.redirect(authReqURL);
       }
     }
   });

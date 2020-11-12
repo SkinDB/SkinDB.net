@@ -121,6 +121,7 @@ export const webAccessLogStream = rfs.createStream('access.log', { interval: '1d
       process.exit(2);
     }
   }
+
   server = createServer(require('./server').app);
 
   server.on('error', (err: { syscall: string, code: string }) => {
