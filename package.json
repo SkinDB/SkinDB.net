@@ -21,7 +21,7 @@
     "url": "https://github.com/SkinDB/SkinDB.net/issues"
   },
   "dependencies": {
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.12"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
